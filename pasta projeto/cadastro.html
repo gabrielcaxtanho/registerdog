@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet'  href='css/cadastro_style.css'>
+</head>
+<body>
+    <main class="rodape">
+        <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i>PET REGISTER</h1>
+        <h3 class="rodape__texto">TODOS SEUS REGISTROS EM UM SO LUGAR</h3>
+    </main>
+
+
+    <section class="principal">
+        <section class="principal__imagemfundo">
+            <div class="principal__elemento">
+               <section class="formulario_central">
+                    <h1>CADASTRO DO PET</h1>
+                    <form action="" method="post">  
+                        <div>
+                            <label for="nome">RAÇA:</label>
+                            <input type="text" id="RACA" name="RACA" required>
+                        </div>
+                        <div>
+                            <label for="nomepet">NOME DO PET:</label>
+                            <input type="text" id="nomepet" name="nomepet" required>
+                        </div>
+                        <div>
+                            <label for="nometutor">NOME:</label>
+                            <input type="text" id="nometutor" name="nometutor" required>
+                        </div>
+                        <div>
+                            <label for="servico">higienização:</label>
+                            <select id="servico" name="servico" required>
+                                <option value="">SELECIONE:</option>
+                                <option value="banho">BANHO</option>
+                                <option value="tosa">TOSA</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="observacao">OBSERVAÇÕES:</label>
+                            <input type="text" id="observacao" name="observacao" required>
+                        </div>
+                        <div>
+                            <button type="submit">CADASTRAR PET</button>
+                            <button type="button" onclick="window.location.href='./index.html'">CANCELAR</button>
+                        </div>
+                    </form>
+               </section>
+            </div>
+        </section>
+        
+    </section>
+    <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

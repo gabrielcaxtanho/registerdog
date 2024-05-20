@@ -19,34 +19,41 @@
             <div class="principal__elemento">
                <section class="formulario_central">
                     <h1>CADASTRO DO PET</h1>
-                    <form action="" method="post">  
-                        <div>
+                    <form action="" method="post" class="formulario">  
+                        <div class="elemento_formulario">
                             <label for="nome">RAÇA:</label>
-                            <input type="text" id="RACA" name="RACA" required>
+                            <input class="campo" type="text" id="RACA" name="RACA" required>
                         </div>
-                        <div>
+                        <div class="elemento_formulario">
                             <label for="nomepet">NOME DO PET:</label>
-                            <input type="text" id="nomepet" name="nomepet" required>
+                            <input  class="campo" type="text" id="nomepet" name="nomepet" required>
                         </div>
-                        <div>
-                            <label for="nometutor">NOME:</label>
-                            <input type="text" id="nometutor" name="nometutor" required>
+                        <div class="elemento_formulario">
+                            <label for="nometutor">NOME TUTOR:</label>
+                            <input class="campo" type="text" id="nometutor" name="nometutor" required>
                         </div>
-                        <div>
-                            <label for="servico">higienização:</label>
-                            <select id="servico" name="servico" required>
-                                <option value="">SELECIONE:</option>
-                                <option value="banho">BANHO</option>
-                                <option value="tosa">TOSA</option>
-                            </select>
-                        </div>
-                        <div>
+                        <div class="elemento_formulario">
+                            <label for="investimento">HIGIENIZAÇÃO:</label>
+                            <div class="elemento_formulario_2">
+                                <input type="radio" id="renda-fixa" name="investimento" value="renda-fixa" required>
+                                <label for="renda-fixa">BANHO</label>
+                            </div>
+                            <div class="elemento_formulario_2">
+                                <input type="radio" id="renda-variavel" name="investimento" value="renda-variavel">
+                                <label for="renda-variavel">TOSA</label>
+                            </div>
+                            <div class="elemento_formulario_2">
+                                <input type="radio" id="fundos-de-investimento" name="investimento" value="fundos-de-investimento">
+                                <label for="fundos-de-investimento">BANHO\TOSA</label>
+                            </div>
+                            
+                        <div class="elemento_formulario">
                             <label for="observacao">OBSERVAÇÕES:</label>
-                            <input type="text" id="observacao" name="observacao" required>
+                            <input class="campo" type="text" id="observacao" name="observacao" required>
                         </div>
-                        <div>
-                            <button type="submit">CADASTRAR PET</button>
-                            <button type="button" onclick="window.location.href='./index.html'">CANCELAR</button>
+                        <div class="elemento_formulario_botoes">
+                            <button type="submit" class="button-19" role="button">CADASTRAR PET</button>
+                            <button type="button" class="button-19_2" role="button" onclick="window.location.href='./index.html'">CANCELAR</button>
                         </div>
                     </form>
                </section>
@@ -58,3 +65,4 @@
 
 </body>
 </html>
+

@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+
+*{
+    margin: 0;
+    padding: 0; 
+}
+
+body{
+    background-color: #131211;
+    font-family: "Nunito", sans-serif
+}
+
+.rodape{
+    font-family: "Poetsen One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 90px;
+    color: #6494be;
+}
+
+.principal{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+.principal__imagemfundo{
+    box-sizing: border-box;
+    background-image: url(/pug.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 1419px;
+    height: 758px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.principal__botoes{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.principal__elemento{
+    display: flex;
+    border-radius: 100px;
+    width: 1300px;
+    height: 650px;
+    background-color: rgba(49, 49, 49, 0.616);
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.botoes__central{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 456px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px black;
+    height: 196px;
+    background-color: #6494be;
+    transition-duration: 1s;
+}
+
+.botao{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    align-content: center;
+    align-items: center;
+    color: black;
+}
+
+
+.botoes__central:hover{
+    width: 496px;
+    align-content: center;
+    align-items: center;
+    transition-duration: 1s;
+    background-color: #425f77;
+
+
+}
+
+
+
+
+

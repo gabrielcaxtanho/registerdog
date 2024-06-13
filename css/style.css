@@ -7,8 +7,8 @@
 }
 
 body{
-    background-color: #131211;
-    font-family: "Nunito", sans-serif
+    background-color: #dedede;
+    font-family: "Nunito", sans-serif;
 }
 
 .rodape{
@@ -30,23 +30,9 @@ body{
     align-content: center;
     align-items: center;
     padding-bottom: 30px;
+    margin: 30px;
 }
 
-.principal__imagemfundo{
-    box-sizing: border-box;
-    background-image: url(img/pug.jpg);
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 1419px;
-    height: 758px;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-}
 
 .principal__botoes{
     display: flex;
@@ -54,17 +40,6 @@ body{
     justify-content: center;
     align-items: center;
     gap: 30px;
-}
-
-.principal__elemento{
-    display: flex;
-    border-radius: 100px;
-    width: 1300px;
-    height: 650px;
-    background-color: rgba(49, 49, 49, 0.616);
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: center;
 }
 
 .botoes__central{
@@ -90,18 +65,10 @@ body{
     color: black;
 }
 
-
 .botoes__central:hover{
     width: 496px;
     align-content: center;
     align-items: center;
     transition-duration: 1s;
     background-color: #425f77;
-
-
 }
-
-
-
-
-

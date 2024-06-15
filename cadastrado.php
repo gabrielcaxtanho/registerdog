@@ -31,7 +31,7 @@ if (!$stmt_select) {
     <title>Pets Cadastrados</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/petcadastrado.css">
-    <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -66,5 +66,5 @@ if (!$stmt_select) {
     </section>
     </main>
 </body>
-
+<script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
 </html>

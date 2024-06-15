@@ -65,7 +65,7 @@ principal__elemento{
     flex-direction: column;
     align-items: center;
     color: #ffffff;
-    font-size: 0.8em;
+    font-size: 0.9em;
     border-radius: 28px;
     text-align: center;
     background-color: rgb(23, 124, 90);
@@ -76,8 +76,8 @@ principal__elemento{
 }
 
 #submit:hover{
-    width: 4.5em;
-    transition-duration: 1s;
+    width: 7em;
+    transition-duration: 0.3s;
     background-color: #05355c;
 }
 

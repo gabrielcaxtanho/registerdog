@@ -1,18 +1,18 @@
 <?php
 require 'conexao.php';
 
-$mensagem = null; // Inicializa $mensagem como null para não exibir mensagem antes do processamento
+$mensagem = null;
 
-// Verifica se o método da requisição é POST
+// Processamento do formulário quando é submetido via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Pegando os valores do formulário
     $raca = $_POST['raca'] ?? '';
     $nome_pet = $_POST['nomePet'] ?? '';
     $nome_tutor = $_POST['nomeTutor'] ?? '';
     $contato_tutor = $_POST['contatoTutor'] ?? '';
-    $servicos = $_POST['descricao'] ?? '';
+    $descricao_servico = $_POST['descricao'] ?? '';
+    $observacao = $_POST['observacao'] ?? '';
 
-    // Verifica se o nome já existe
+    // Verificação se já existe um pet com o mesmo nome e dono
     $sql_check_nome = "SELECT COUNT(*) FROM pets WHERE nome = :nome_pet";
     $stmt_check_nome = $dbh->prepare($sql_check_nome);
     $stmt_check_nome->bindParam(':nome_pet', $nome_pet);
@@ -22,18 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($count > 0) {
         $mensagem = "<p style='color: red; text-align: center; font-size: 1.5em;'>Já existe um pet com o nome e dono informado.</p>";
     } else {
-        // Prossiga com a inserção do novo registro
         try {
+            // Início da transação para garantir atomicidade das operações
             $dbh->beginTransaction();
 
-            // Inserir raça se não existir
+            // Inserção ou atualização da raça do pet
             $sql_raca = "INSERT INTO racas (nome) VALUES (:raca) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
             $stmt_raca = $dbh->prepare($sql_raca);
             $stmt_raca->bindParam(':raca', $raca);
             $stmt_raca->execute();
             $raca_id = $dbh->lastInsertId();
 
-            // Inserir dono se não existir
+            // Inserção ou atualização do dono do pet
             $sql_dono = "INSERT INTO donos (nome, contato) VALUES (:nome_tutor, :contato_tutor) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
             $stmt_dono = $dbh->prepare($sql_dono);
             $stmt_dono->bindParam(':nome_tutor', $nome_tutor);
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt_dono->execute();
             $dono_id = $dbh->lastInsertId();
 
-            // Inserir pet
+            // Inserção do pet
             $sql_pet = "INSERT INTO pets (nome, raca_id, dono_id) VALUES (:nome_pet, :raca_id, :dono_id)";
             $stmt_pet = $dbh->prepare($sql_pet);
             $stmt_pet->bindParam(':nome_pet', $nome_pet);
@@ -50,37 +50,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt_pet->execute();
             $pet_id = $dbh->lastInsertId();
 
-            // Inserir visita
-            $sql_visita = "INSERT INTO visitas (pet_id, servico_id, dataVisita) 
-                           VALUES (:pet_id, (SELECT id FROM servicos WHERE descricao = :descricao), NOW())";
+            // Busca do ID do serviço selecionado
+            $sql_servico = "SELECT id FROM servicos WHERE descricao = :descricao_servico";
+            $stmt_servico = $dbh->prepare($sql_servico);
+            $stmt_servico->bindParam(':descricao_servico', $descricao_servico);
+            $stmt_servico->execute();
+            $servico = $stmt_servico->fetch(PDO::FETCH_ASSOC);
+            $servico_id = $servico['id'];
+
+            // Inserção na tabela visitaspet
+            $sql_visita = "INSERT INTO visitaspet (pet_id, servico_id, dataVisita, observacoes) VALUES (:pet_id, :servico_id, NOW(), :observacao)";
             $stmt_visita = $dbh->prepare($sql_visita);
             $stmt_visita->bindParam(':pet_id', $pet_id);
-            $stmt_visita->bindParam(':descricao', $servicos_descricao);
+            $stmt_visita->bindParam(':servico_id', $servico_id);
+            $stmt_visita->bindParam(':observacao', $observacao);
             $stmt_visita->execute();
 
-            // Verifica se a transação foi bem sucedida
-            if ($dbh->commit()) {
-                $mensagem = "<p style='color: green; text-align: center; font-size: 1.5em;'>Dados inseridos com sucesso!</p>";
-            } else {
-                $mensagem = "<p style='color: red; text-align: center; font-size: 1.5em;'>Falha ao inserir dados!</p>";
-            }
-        } catch (PDOException $e) {
+            // Confirmação da transação
+            $dbh->commit();
+            $mensagem = "<p style='color: green; text-align: center; font-size: 1.5em;'>Pet cadastrado com sucesso!</p>";
+        } catch (Exception $e) {
+            // Rollback em caso de erro
             $dbh->rollBack();
-            $mensagem = 'Falha na inserção: ' . $e->getMessage();
+            $mensagem = "<p style='color: red; text-align: center; font-size: 1.5em;'>Erro ao cadastrar pet: " . $e->getMessage() . "</p>";
         }
     }
 }
-
-// Consulta SQL para selecionar todos os registros
-$sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, s.descricao AS descricao, v.dataVisita 
-               FROM visitas v 
-               JOIN pets p ON v.pet_id = p.id
-               JOIN racas r ON p.raca_id = r.id
-               JOIN donos d ON p.dono_id = d.id
-               JOIN servicos s ON v.servico_id = s.id";
-$stmt_select = $dbh->query($sql_select);
-$pets = $stmt_select->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -126,23 +124,31 @@ $pets = $stmt_select->fetchAll(PDO::FETCH_ASSOC);
                             <input class="campo" type="text" id="contatoTutor" name="contatoTutor" required>
                         </div>
                         <div class="elemento_formulario">
-                            <label>higienização<b style="color: #ff0000;">*</b></label>
+                            <label>serviços<b style="color: #ff0000;">*</b></label>
                             <div class="elemento_formulario_2">
-                                <input type="radio" name="descricao" value="banho" required>
+                                <input type="radio" name="descricao" value="Banho" required>
                                 <label for="banho">banho</label>
                             </div>
                             <div class="elemento_formulario_2">
-                                <input type="radio" name="descricao" value="tosa">
+                                <input type="radio" name="descricao" value="Tosa">
                                 <label for="tosa">tosa</label>
                             </div>
                             <div class="elemento_formulario_2">
-                                <input type="radio" name="descricao" value="banhoTosa">
-                                <label for="banhoTosa">banho/tosa</label>
+                                <input type="radio" name="descricao" value="Banho e Tosa">
+                                <label for="banhoTosa">banho e tosa</label>
+                            </div>
+                            <div class="elemento_formulario_2">
+                                <input type="radio" name="descricao" value="Vacinação">
+                                <label for="vacinacao">vacinação</label>
+                            </div>
+                            <div class="elemento_formulario_2">
+                                <input type="radio" name="descricao" value="Consulta Veterinária">
+                                <label for="consultaVeterinaria">consulta veterinária</label>
                             </div>
                         </div>
                         <div class="elemento_formulario">
                             <label for="observacao">observações</label>
-                            <input class="campo" type="text" id="observacao" name="observacao" required>
+                            <input class="campo" type="text" id="observacao" name="observacao">
                         </div>
                         <div class="elemento_formulario_botoes">
                             <button type="submit" class="button-19" role="button">CADASTRAR PET</button>
@@ -154,6 +160,7 @@ $pets = $stmt_select->fetchAll(PDO::FETCH_ASSOC);
         </section>
 
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ $sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, d.
               FROM pets p 
               LEFT JOIN racas r ON p.raca_id = r.id 
               LEFT JOIN donos d ON p.dono_id = d.id 
-              LEFT JOIN visitas v ON p.id = v.pet_id 
+              LEFT JOIN visitaspet v ON p.id = v.pet_id 
               LEFT JOIN servicos s ON v.servico_id = s.id 
               WHERE p.nome LIKE :nomePet";
 

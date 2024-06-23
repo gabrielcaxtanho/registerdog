@@ -6,7 +6,7 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' href='css/style.css'>
+    <link rel='stylesheet' href='./css/style.css'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
@@ -35,13 +35,14 @@
                         </ul>
                     </div>
                 </div>
-                <main class="header">
-                    <h1 class="header__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #dedede; margin: 22px;"></i>PET REGISTER</h1>
-                    <h3 class="header__texto">TODOS SEUS REGISTROS EM UM SO LUGAR</h3>
-                </main>
             </div>
         </nav>
     </header>
+
+    <main class="header">
+        <h1 class="header__texto" style="color: #756AB6;"><i class="fa-solid fa-paw fa-2xl" style="color: silver; margin: 22px;"></i>PET REGISTER</h1>
+        <h3 class="header__texto" style="color: #E0AED0;">TODOS SEUS REGISTROS EM UM SO LUGAR</h3>
+    </main>
 
     <?php
     // Conexão com o banco de dados
@@ -113,47 +114,83 @@
         die('Erro na consulta SQL: ' . $dbh->errorInfo()[2]);
     }
     ?>    
-<main class="rodape">
-<section>
-    <div class="row">
-        <!-- Card do Dono Mais Frequente -->
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <i class="fa-solid fa-crown" style="color: #FFD43B; font-size: 2em;"></i>
-                    <h5 class="card-title"  style="padding-top: 0.5em;">Dono Mais Frequente</h5>
-                    <p class="card-text"><strong>Dono:</strong> <?= htmlspecialchars($row_dono_mais_frequente['dono']) ?></p>
-                    <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_dono_mais_frequente['visitas']) ?></p>
-                </div>
-            </div>
-        </div>
-        <!-- Card do Pet Mais Frequente -->
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                <i class="fa-solid fa-crown" style="color: #FFD43B; font-size: 2em;"></i>
-                    <h5 class="card-title" style="padding-top: 0.5em;">Pet Mais Frequente</h5>
-                    <p class="card-text"><strong>Pet:</strong> <?= htmlspecialchars($row_pet_mais_frequente['pet']) ?></p>
-                    <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_pet_mais_frequente['visitas']) ?></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<main class="rodape" style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
-<section class="container mt-5" id="rodape">
+
+    <section>
+        <div style="display: flex; flex-direction: column;">
+            <!-- Card do Dono Mais Frequente -->
+            <div class="col-md-4">
+                <div class="card mb-3"  style="border: solid #00ffb5;">
+                    <div class="card-body">
+                        <i class="fa-solid fa-crown" style="color: #FFD43B; font-size: 2em;"></i>
+                        <h5 class="card-title" style="padding-top: 0.5em;">Dono Mais Frequente</h5>
+                        <p class="card-text"><strong>Dono:</strong> <?= htmlspecialchars($row_dono_mais_frequente['dono']) ?></p>
+                        <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_dono_mais_frequente['visitas']) ?></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Card do Pet Mais Frequente -->
+            <div class="col-md-4">
+                <div class="card mb-3" style="border: solid #00ffb5;">
+                    <div class="card-body">
+                        <i class="fa-solid fa-crown" style="color: #FFD43B; font-size: 2em;"></i>
+                        <h5 class="card-title" style="padding-top: 0.5em;">Pet Mais Frequente</h5>
+                        <p class="card-text"><strong>Pet:</strong> <?= htmlspecialchars($row_pet_mais_frequente['pet']) ?></p>
+                        <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_pet_mais_frequente['visitas']) ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <img src="./img/family.png" alt="" style="opacity: 0.6;">
+    <button style="    background-color: cadetblue; border-radius: 4%; color: white; padding: 1%; border-style: hidden;">click aqui e conheça o petResgate</button>
+</main>
+<aside class="container mt-5" id="rodape" style="display: flex; flex-direction: column; align-items: flex-end;">
+    <style>
+    .round-button {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        margin: 5px;
+        background-color: #f8f9fa;
+    }
+    .round-button i {
+        font-size: 20px;
+    }
+    .accordion-button {
+        display: none; /* Hide the default accordion buttons */
+    }
+</style>
+
+        <div class="d-flex justify-content-around mb-3">
+            <!-- Botões Redondos -->
+            <button class="round-button" style="background-color: cadetblue;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas" aria-expanded="false" aria-controls="collapseVisitas">
+                <i style="color: white;" class="fa-solid fa-users-viewfinder"></i>
+            </button>
+            <button class="round-button" style="background-color: cadetblue;"  type="button" data-bs-toggle="collapse" data-bs-target="#collapseRacas" aria-expanded="false" aria-controls="collapseRacas">
+                <i style=" color: white;" class="fa-solid fa-paw"></i>
+            </button>
+            <button class="round-button" style="background-color: cadetblue;"  type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicos" aria-expanded="true" aria-controls="collapseServicos">
+                <i style=" color: white;" class="fa-solid fa-hand-holding-dollar"></i>
+            </button>
+        </div>
+
         <div class="accordion" id="accordionExample">
-
             <!-- Visitas por Dono -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingVisitas">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas" aria-expanded="true" aria-controls="collapseVisitas">
-                        Visitas por Dono
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas" aria-expanded="false" aria-controls="collapseVisitas">
+                        <i class="fa-solid fa-users-viewfinder"></i> Visitas por Dono
                     </button>
                 </h2>
-                <div id="collapseVisitas" class="accordion-collapse collapse show" aria-labelledby="headingVisitas" data-bs-parent="#accordionExample">
+                <div id="collapseVisitas" class="accordion-collapse collapse" aria-labelledby="headingVisitas" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <div class="row row-cols-md-3 g-3">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
                             <?php while ($row = $stmt_visitas_dono->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <div class="col">
                                     <div class="card">
@@ -179,7 +216,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingRacas">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRacas" aria-expanded="false" aria-controls="collapseRacas">
-                        Raças Mais Frequentes
+                        <i class="fa-solid fa-paw"></i> Raças Mais Frequentes
                     </button>
                 </h2>
                 <div id="collapseRacas" class="accordion-collapse collapse" aria-labelledby="headingRacas" data-bs-parent="#accordionExample">
@@ -203,31 +240,30 @@
             <!-- Serviços Mais Solicitados -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingServicos">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicos" aria-expanded="false" aria-controls="collapseServicos">
-                        Serviços Mais Solicitados
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicos" aria-expanded="true" aria-controls="collapseServicos">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> Serviços Mais Solicitados
                     </button>
                 </h2>
-                <div id="collapseServicos" class="accordion-collapse collapse" aria-labelledby="headingServicos" data-bs-parent="#accordionExample">
+                <div id="collapseServicos" class="accordion-collapse collapse show" aria-labelledby="headingServicos" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div class="row row-cols-1 row-cols-md-2 g-4">
                             <?php while ($row = $stmt_servicos_solicitados->fetch(PDO::FETCH_ASSOC)) : ?>
                                 <div class="col">
-                                    <div class="card">
+                                    <div class="card" style="margin-bottom: 5%;">
                                         <div class="card-body">
                                             <h5 class="card-title"><?= htmlspecialchars($row['servico']) ?></h5>
                                             <p class="card-text"><strong>Frequência:</strong> <?= htmlspecialchars($row['frequencia']) ?></p>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endwhile; ?>
+                                <?php endwhile; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-</section>
-</main>
+                            </aside>
+
 <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     

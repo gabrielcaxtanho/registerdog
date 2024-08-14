@@ -12,7 +12,7 @@
     ?>
     <main class="header">
         <h1 class="header__texto" style="color: #756AB6;"><i class="fa-solid fa-paw fa-2xl" style="color: silver; margin: 22px;"></i>PET REGISTER</h1>
-        <h3 class="header__texto font-monospace" style="color: #E0AED0;">TODOS SEUS REGISTROS EM UM SO LUGAR</h3>
+        <h3 class="header__texto " style="color: #E0AED0;">TODOS SEUS REGISTROS EM UM SO LUGAR</h3>
     </main>
 
     <?php

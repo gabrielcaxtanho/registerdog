@@ -75,7 +75,7 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <main class="rodape">
         <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i>EDITAR PET</h1>
-
+        
         <section class="resultado" id="secaoPets">
             <div class="cards-container">
                 <div class="card">

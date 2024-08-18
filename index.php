@@ -28,7 +28,7 @@
     $stmt_select->bindValue(':nomePet', "%$nomePet%");
     $stmt_select->execute();
 
-    
+
     $sql_racas_frequentes = "SELECT r.nome AS raca, COUNT(v.id) AS frequencia
                              FROM visitaspet v
                              JOIN pets p ON v.pet_id = p.id
@@ -37,7 +37,7 @@
                              ORDER BY frequencia DESC";
     $stmt_racas_frequentes = $dbh->query($sql_racas_frequentes);
 
-   
+
     $sql_servicos_solicitados = "SELECT s.descricao AS servico, COUNT(v.id) AS frequencia
                                  FROM visitaspet v
                                  JOIN servicos s ON v.servico_id = s.id
@@ -45,7 +45,7 @@
                                  ORDER BY frequencia DESC";
     $stmt_servicos_solicitados = $dbh->query($sql_servicos_solicitados);
 
-    
+
     $sql_visitas_dono = "SELECT d.nome AS dono, COUNT(v.id) AS visitas, p.nome AS nomePet, d.contato AS contatoTutor, 
                          s.descricao AS servicospet, s.observacoes, v.dataVisita
                          FROM visitaspet v
@@ -56,7 +56,7 @@
                          ORDER BY visitas DESC";
     $stmt_visitas_dono = $dbh->query($sql_visitas_dono);
 
-    
+
     $sql_pet_mais_frequente = "SELECT p.nome AS pet, COUNT(v.id) AS visitas
                                FROM visitaspet v
                                JOIN pets p ON v.pet_id = p.id
@@ -77,28 +77,23 @@
     $stmt_dono_mais_frequente = $dbh->query($sql_dono_mais_frequente);
     $row_dono_mais_frequente = $stmt_dono_mais_frequente->fetch(PDO::FETCH_ASSOC);
 
-    
+
     if (!$stmt_select || !$stmt_racas_frequentes || !$stmt_servicos_solicitados || !$stmt_visitas_dono || !$stmt_pet_mais_frequente || !$stmt_dono_mais_frequente) {
         die('Erro na consulta SQL: ' . $dbh->errorInfo()[2]);
     }
     ?>
 
-    <div class="container my-4">
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-primary" style="background-color: cadetblue;">Click aqui e conheça o petResgate</button>
-            </div>
-        </div>
-    </div>
+    <div class="container-fluid">
+        <div class="row justify-content-between align-items-baseline mb-4">
+<!-- 
+                   <div class="col-md-1"></div>  -->
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
+            <!-- Coluna das Informações de Cachorros e Donos -->
+            <div class="col-md-8" style="margin-left: 2%;">
                 <hr class="border-white">
                 <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
                     <h5 class="text-ciano-agiliza">😄 Frequência!</h5>
                     <span class="text-muted">Pet e Dono</span>
-
                     <div class="row my-4">
                         <div class="col-md-6">
                             <div class="card mb-3 border-primary">
@@ -110,7 +105,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="card mb-3 border-primary">
                                 <div class="card-body">
@@ -122,7 +116,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="d-flex justify-content-around mb-4">
                         <button class="btn btn-circle btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas">
                             <i class="fa-solid fa-users-viewfinder text-white"></i>
@@ -134,7 +127,6 @@
                             <i class="fa-solid fa-hand-holding-dollar text-white"></i>
                         </button>
                     </div>
-
                     <div class="accordion" id="accordionExample">
                         <!-- Visitas por Dono -->
                         <div class="accordion-item">
@@ -146,27 +138,11 @@
                             <div id="collapseVisitas" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <?php while ($row = $stmt_visitas_dono->fetch(PDO::FETCH_ASSOC)) : ?>
-                                            <div class="col">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><?= htmlspecialchars($row['dono']) ?></h5>
-                                                        <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row['visitas']) ?></p>
-                                                        <p class="card-text"><strong>Nome do Pet:</strong> <?= htmlspecialchars($row['nomePet']) ?></p>
-                                                        <p class="card-text"><strong>Nome do Tutor:</strong> <?= htmlspecialchars($row['dono']) ?></p>
-                                                        <p class="card-text"><strong>Contato do Tutor:</strong> <?= htmlspecialchars($row['contatoTutor']) ?></p>
-                                                        <p class="card-text"><strong>Serviço:</strong> <?= htmlspecialchars($row['servicospet']) ?></p>
-                                                        <p class="card-text"><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
-                                                        <p class="card-text"><strong>Data da Visita:</strong> <?= htmlspecialchars($row['dataVisita']) ?></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endwhile; ?>
+                                        <!-- PHP loop para listar as visitas -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Raças Mais Frequentes -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingRacas">
@@ -184,18 +160,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php while ($row = $stmt_racas_frequentes->fetch(PDO::FETCH_ASSOC)) : ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($row['raca']) ?></td>
-                                                    <td><?= htmlspecialchars($row['frequencia']) ?></td>
-                                                </tr>
-                                            <?php endwhile; ?>
+                                            <!-- PHP loop para listar as raças mais frequentes -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Serviços Mais Solicitados -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingServicos">
@@ -213,12 +183,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php while ($row = $stmt_servicos_solicitados->fetch(PDO::FETCH_ASSOC)) : ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($row['servico']) ?></td>
-                                                    <td><?= htmlspecialchars($row['frequencia']) ?></td>
-                                                </tr>
-                                            <?php endwhile; ?>
+                                            <!-- PHP loop para listar os serviços mais solicitados -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -227,14 +192,69 @@
                     </div> <!-- Fim do accordion -->
                 </div>
             </div>
+            <!-- Coluna da Imagem -->
+            <div class="col-md-2 text-center">
+                <small style="font-weight: 700; border-bottom: groove; font-size: large;"> <i class="fa-regular fa-hand-point-down fa-bounce" style="font-size: x-large"></i> Conheça também o site</small>
+                <h4 style="margin-bottom: 6%;"></h4>
+                <a href="https://gabrielcaxtanho.github.io/betoplus/" target="_blank" class="image-link">
+                    <img src="https://private-user-images.githubusercontent.com/96641560/339418336-d8ac7024-9443-45d8-a94e-908a93d01650.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjM5MzYyODQsIm5iZiI6MTcyMzkzNTk4NCwicGF0aCI6Ii85NjY0MTU2MC8zMzk0MTgzMzYtZDhhYzcwMjQtOTQ0My00NWQ4LWE5NGUtOTA4YTkzZDAxNjUwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA4MTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwODE3VDIzMDYyNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTFmYTAzMTM2MzRhYmJkMjA3YTRmMWFiNDViNzZiODUyOWU1ZDMwMDM2ZmEzOWIyMjQwMjdkZGMzZWRiYmVhOGQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.OJkDXWE72UI-mPse5cfahORgi6tzzsEFx5wSDre3hsM" alt="cachorro da raça pug com um brasão, para divulgar um site de rastreio animal. Clique para conhecer o site" class="image">
+                    <span class="overlay-text">Clique para conhecer o site</span>
+                </a>
+            </div>
         </div>
     </div>
+
+    <style>
+        .image-link {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .image-link:hover {
+            transform: scale(1.05);
+        }
+
+        .image {
+            width: 90%;
+            height: auto;
+            border-radius: 15px;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-link:hover .image {
+            opacity: 0.3;
+        }
+
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-link:hover .overlay-text {
+            opacity: 1;
+        }
+    </style>
+
 
     <script src="https://kit.fontawesome.com/5fe78ee910.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qLL9TLZS4MuW34xtMy0fQpQkCPMRC33Xji0KSm8UGcx2f2uOaayDquNk8eQ1A5ai" crossorigin="anonymous"></script>
 
     <?php
-        include_once 'php/footer_index.php';
+    include_once 'php/footer_index.php';
     ?>
 </body>
 

@@ -3,14 +3,14 @@
 </head>
 
 <header class="header bg-light bg-gradient shadow-sm">
-<!--         <img src="https://i.pinimg.com/736x/12/b3/58/12b358b908ea10e0d8ccfb37f45b01f5.jpg" alt="Header Image"> -->
-        <div class="btn-container">
-            <button class="btn btn-outline-secondary" onclick="openNav()">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h1 class="ms-3 mb-0"></h1>
-        </div>
-    </header>
+    <!--         <img src="https://i.pinimg.com/736x/12/b3/58/12b358b908ea10e0d8ccfb37f45b01f5.jpg" alt="Header Image"> -->
+    <div class="btn-container">
+        <button class="btn btn-outline-secondary" onclick="openNav()">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+        <h1 class="ms-3 mb-0"></h1>
+    </div>
+</header>
 
 <div id="mySidenav" class="sidenav shadow font-montserrat">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="user-box">
         <!-- PHP code for user session can be inserted here -->
         <div class="col d-flex justify-content-center py-2">
@@ -38,6 +38,7 @@
 
     <a href="dash"><i class="fas fa-home fa-1x"></i> Início</a>
     <a href="profile"><i class="far fa-id-badge"></i> Meu Perfil</a>
+    <a href='cadastro.php'><i class="fa-solid fa-address-card"></i></i> Cadastro</a>
     <a href=''><i class='fas fa-list fa-1x'></i> Gerenciamento</a>
     <a href=''><i class='fas fa-cog fa-1x'></i> Configurações</a>
     <a href=''><i class="fas fa-boxes fa-1x"></i> Produtos</a>
@@ -113,7 +114,7 @@
         document.querySelector('.main-content').style.marginLeft = "0";
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         var toastEl = document.querySelector('.toast');
         var toast = new bootstrap.Toast(toastEl);
         toast.show();

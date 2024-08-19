@@ -57,7 +57,6 @@ $stmt_servicos = $dbh->query($sql_servicos);
 $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -67,69 +66,85 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
     <title>Editar Pet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/petcadastrado.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-<?php
-    include_once 'php/header_index.php';
-    ?>
-    <main class="rodape">
-        <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i>EDITAR PET</h1>
-        
-        <section class="resultado" id="secaoPets">
-            <div class="cards-container">
-                <div class="card">
-                    <form id="editForm" method="post" action="salvar_edicao.php">
-                        <input type="hidden" name="petId" value="<?= $id ?>">
-                        
-                        <label for="nomePet">Nome do Pet:</label><br>
-                        <input type="text" id="nomePet" name="nomePet" value="<?= htmlspecialchars($pet['nomePet']) ?>"><br>
+    <?php include_once 'php/header_index.php'; ?>
 
-                        <label for="raca">Raça:</label><br>
-                        <select id="raca" name="raca">
+    <div class="container"> 
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h4 class="text-center"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i> editar informações do Pet <strong style="text-transform: uppercase; color: #4b6d89;"><?= htmlspecialchars($pet['nomePet']) ?></strong></h4>
+            <hr class="border-white">
+            <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
+                <form id="editForm" method="post" action="salvar_edicao.php">
+                    <input type="hidden" name="petId" value="<?= $id ?>">
+
+                    <div class="mb-3">
+                        <label for="nomePet" class="form-label" style="font-family: cursive; font-size: larger;">Nome do Pet:</label>
+                        <input type="text" id="nomePet" name="nomePet" class="form-control" value="<?= htmlspecialchars($pet['nomePet']) ?>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="raca" class="form-label" style="font-family: cursive; font-size: larger;">Raça:</label>
+                        <select id="raca" name="raca" class="form-select">
                             <?php foreach ($racas as $raca) : ?>
                                 <option value="<?= $raca['id'] ?>" <?= ($raca['id'] == $pet['raca_id']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($raca['nome']) ?>
                                 </option>
                             <?php endforeach; ?>
-                        </select><br>
+                        </select>
+                    </div>
 
-                        <label for="nomeTutor">Nome do Tutor:</label><br>
-                        <select id="nomeTutor" name="nomeTutor">
+                    <div class="mb-3">
+                        <label for="nomeTutor" class="form-label" style="font-family: cursive; font-size: larger;">Nome do Tutor:</label>
+                        <select id="nomeTutor" name="nomeTutor" class="form-select">
                             <?php foreach ($donos as $dono) : ?>
                                 <option value="<?= $dono['id'] ?>" <?= ($dono['id'] == $pet['dono_id']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($dono['nome']) ?>
                                 </option>
                             <?php endforeach; ?>
-                        </select><br>
+                        </select>
+                    </div>
 
-                        <label for="contatoTutor">Contato do Tutor:</label><br>
-                        <input type="text" id="contatoTutor" name="contatoTutor" value="<?= htmlspecialchars($pet['contatoTutor']) ?>"><br>
+                    <div class="mb-3">
+                        <label for="contatoTutor" class="form-label" style="font-family: cursive; font-size: larger;">Contato do Tutor:</label>
+                        <input type="text" id="contatoTutor" name="contatoTutor" class="form-control" value="<?= htmlspecialchars($pet['contatoTutor']) ?>">
+                    </div>
 
-                        <label for="servico">Serviço:</label><br>
-                        <select id="servico" name="servico">
+                    <div class="mb-3">
+                        <label for="servico" class="form-label" style="font-family: cursive; font-size: larger;">Serviço:</label>
+                        <select id="servico" name="servico" class="form-select">
                             <?php foreach ($servicos as $servico) : ?>
                                 <option value="<?= $servico['id'] ?>" <?= ($servico['id'] == $pet['servico_id']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($servico['descricao']) ?>
                                 </option>
                             <?php endforeach; ?>
-                        </select><br>
+                        </select>
+                    </div>
 
-                        <label for="dataVisita">Data da Visita:</label><br>
-                        <input type="date" id="dataVisita" name="dataVisita" value="<?= $pet['dataVisita'] ?>"><br>
+                    <div class="mb-3">
+                        <label for="dataVisita" class="form-label" style="font-family: cursive; font-size: larger;">Data da Visita:</label>
+                        <input type="date" id="dataVisita" name="dataVisita" class="form-control" value="<?= $pet['dataVisita'] ?>">
+                    </div>
 
-                        <label for="observacoes">Observações:</label><br>
-                        <textarea id="observacoes" name="observacoes"><?= htmlspecialchars($pet['observacoes']) ?></textarea><br>
+                    <div class="mb-3">
+                        <label for="observacoes" class="form-label" style="font-family: cursive; font-size: larger;">Observações:</label>
+                        <textarea id="observacoes" name="observacoes" class="form-control"><?= htmlspecialchars($pet['observacoes']) ?></textarea>
+                    </div>
 
-                        <button type="submit">Salvar Alterações</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
+                </form>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
+</div>
+
+
     <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include_once 'php/footer_index.php'; ?>
 </body>
-<?php 
-   include_once 'php/footer_index.php';
-?>
+
 </html>

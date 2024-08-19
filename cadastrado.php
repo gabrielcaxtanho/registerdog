@@ -1,11 +1,10 @@
 <?php
-// Conexão com o banco de dados
+
 require 'conexao.php';
 
-// Verifica se o parâmetro nomePet foi enviado via GET
 $nomePet = isset($_GET['nomePet']) ? $_GET['nomePet'] : '';
 
-// Consulta SQL para buscar informações de pets com base no nome do pet
+
 $sql_select = "
     SELECT
         p.id AS petId,
@@ -22,18 +21,13 @@ $sql_select = "
     WHERE
         p.nome LIKE :nomePet
 ";
-    
 
-// Prepara a consulta
 $stmt_select = $dbh->prepare($sql_select);
 
-// Substitui o parâmetro :nomePet pelo valor apropriado (com wildcard %)
 $stmt_select->bindValue(':nomePet', "%$nomePet%");
 
-// Executa a consulta
 $stmt_select->execute();
 
-// Verifica se houve erro na execução da consulta
 if (!$stmt_select) {
     die('Erro na consulta SQL: ' . $dbh->errorInfo()[2]);
 }
@@ -51,8 +45,9 @@ if (!$stmt_select) {
 </head>
 
 <body>
+    <?php include_once 'php/header_index.php'; ?>
     <main class="rodape">
-        <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i>PET REGISTER</h1>
+        <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #97cdd2; margin: 22px;"></i>PET REGISTER</h1>
         <h3 class="rodape__texto">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h3>
 
         <h2>Registros de Pets</h2>
@@ -64,27 +59,37 @@ if (!$stmt_select) {
                 <button type="submit" id="submit">Buscar</button>
             </form>
         </div>
+        <div class="col-md-8 offset-md-2"> <!-- Centraliza a coluna de 8 colunas -->
+            <section class="resultado" id="secaoPets">
+                <div class="row"> <!-- Mantém o row apenas para os cartões -->
+                    <?php while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) : ?>
+                        <div class="col-md-4 mb-4"> <!-- Altera o tamanho da coluna para 4 colunas no layout md (tablet e acima) -->
+                            <div class="card shadow-sm border-primary h-100"> <!-- Utiliza as classes de cartão do Bootstrap -->
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($row['nomePet']) ?></h5>
+                                    <p class="card-text"><strong>Raça:</strong> <?= htmlspecialchars($row['raca']) ?></p>
+                                    <p class="card-text"><strong>Nome do Tutor:</strong> <?= htmlspecialchars($row['nomeTutor']) ?></p>
+                                    <p class="card-text"><strong>Contato do Tutor:</strong> <?= htmlspecialchars($row['contatoTutor']) ?></p>
+                                    <p class="card-text"><strong>Serviços:</strong> <?= htmlspecialchars($row['servicos']) ?></p>
+                                    <p class="card-text"><strong>Data da Visita:</strong> <?= htmlspecialchars($row['dataVisita']) ?></p>
+                                    <p class="card-text"><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <a class="btn btn-primary w-100" href="edit.php?id=<?= $row['petId'] ?>"><i class="fa-solid fa-pencil"></i> Editar</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+            </section>
+        </div>
 
-        <section class="resultado" id="secaoPets">
-            <div class="cards-container">
-                <?php while ($row = $stmt_select->fetch(PDO::FETCH_ASSOC)) : ?>
-                    <div class="card" id="pet-<?= $row['petId'] ?>">
-                        <h3><?= htmlspecialchars($row['nomePet']) ?></h3>
-                        <p><strong>Raça:</strong> <?= htmlspecialchars($row['raca']) ?></p>
-                        <p><strong>Nome do Tutor:</strong> <?= htmlspecialchars($row['nomeTutor']) ?></p>
-                        <p><strong>Contato do Tutor:</strong> <?= htmlspecialchars($row['contatoTutor']) ?></p>
-                        <p><strong>Serviços:</strong> <?= htmlspecialchars($row['servicos']) ?></p>
-                        <p><strong>Data da Visita:</strong> <?= htmlspecialchars($row['dataVisita']) ?></p>
-                        <p><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
-                        <!-- Ajuste o href abaixo para passar o ID do pet -->
-                        <a class="btn btn-primary" href="edit.php?id=<?= $row['petId'] ?>"><i class="fa-solid fa-pencil"></i></a>
-                    </div>
-                <?php endwhile; ?>
 
-            </div>
-        </section>
     </main>
     <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
+    <?php
+    include_once 'php/footer_index.php';
+    ?>
 </body>
 
 </html>

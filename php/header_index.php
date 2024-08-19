@@ -39,6 +39,7 @@
     <a href="dash"><i class="fas fa-home fa-1x"></i> Início</a>
     <a href="profile"><i class="far fa-id-badge"></i> Meu Perfil</a>
     <a href='cadastro.php'><i class="fa-solid fa-address-card"></i></i> Cadastro</a>
+    <a href='cadastrado.php'><i class="fa-solid fa-magnifying-glass-chart"></i> Pet Cadastrado</a>
     <a href=''><i class='fas fa-list fa-1x'></i> Gerenciamento</a>
     <a href=''><i class='fas fa-cog fa-1x'></i> Configurações</a>
     <a href=''><i class="fas fa-boxes fa-1x"></i> Produtos</a>

@@ -41,24 +41,31 @@ if (!$stmt_select) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Pets Cadastrados</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/petcadastrado.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
     <?php include_once 'php/header_index.php'; ?>
-    <main class="rodape">
-        <h1 class="rodape__texto"><i class="fa-solid fa-paw fa-2xl" style="color: #97cdd2; margin: 22px;"></i>PET REGISTER</h1>
-        <h3 class="rodape__texto">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h3>
+    <main class="font">
+        <h1>PET REGISTER</h1>
+        <h3">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h3>
 
         <h2>Registros de Pets</h2>
 
-        <div class="principal__elemento">
-            <form id="pesquisa" method="get" action="">
-                <label class="nomePet" for="nomePet">Pesquisar</label>
-                <input class="inputnomePet" type="text" id="" name="nomePet" value="<?= htmlspecialchars($nomePet) ?>" placeholder="Digite o nome do pet">
-                <button type="submit" id="submit">Buscar</button>
-            </form>
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form id="pesquisa" method="get" action="">
+                        <div class="mb-3">
+                            <label for="nomePet" class="form-label">Pesquisar</label>
+                            <input type="text" class="form-control" id="nomePet" name="nomePet" value="<?= htmlspecialchars($nomePet) ?>" placeholder="Digite o nome do pet">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-30" id="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
         </div>
+
         <div class="col-md-8 offset-md-2"> <!-- Centraliza a coluna de 8 colunas -->
             <section class="resultado" id="secaoPets">
                 <div class="row"> <!-- Mantém o row apenas para os cartões -->

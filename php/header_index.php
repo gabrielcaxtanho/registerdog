@@ -2,11 +2,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<header class="header bg-light bg-gradient shadow-sm">
-    <!--         <img src="https://i.pinimg.com/736x/12/b3/58/12b358b908ea10e0d8ccfb37f45b01f5.jpg" alt="Header Image"> -->
+<header class="header bg-light bg-gradient shadow-sm p-2">
+    <!--<img src="https://i.pinimg.com/736x/12/b3/58/12b358b908ea10e0d8ccfb37f45b01f5.jpg" alt="Header Image"> -->
     <div class="btn-container">
         <button class="btn btn-outline-secondary" onclick="openNav()">
-            <i class="fa-solid fa-bars-staggered"></i>
+            <i class="fa-solid fa-bars-staggered"  style="font-size: 120%;"></i>
         </button>
         <h1 class="ms-3 mb-0"></h1>
     </div>
@@ -36,16 +36,14 @@
         </div>
     </div>
 
-    <a href="dash"><i class="fas fa-home fa-1x"></i> Início</a>
-    <a href="profile"><i class="far fa-id-badge"></i> Meu Perfil</a>
+    <a href="index.php"><i class="fas fa-home fa-1x"></i> Início</a>
+    <a href=""><i class="far fa-id-badge"></i> Meu Perfil</a>
     <a href='cadastro.php'><i class="fa-solid fa-address-card"></i></i> Cadastro</a>
     <a href='cadastrado.php'><i class="fa-solid fa-magnifying-glass-chart"></i> Pet Cadastrado</a>
-    <a href=''><i class='fas fa-list fa-1x'></i> Gerenciamento</a>
-    <a href=''><i class='fas fa-cog fa-1x'></i> Configurações</a>
-    <a href=''><i class="fas fa-boxes fa-1x"></i> Produtos</a>
-    <a class="deactivated" href="#"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a>
-    <a class="deactivated" href="#"><i class="fas fa-comments fa-1x mr-1"></i> Chat</a>
-    <a class="deactivated" href="#"><i class="fas fa-bell fa-1x mr-1"></i> Notificações</a>
+    <a href='acompanhamento.php'><i class='fas fa-list fa-1x'></i> Acompanhamento</a>
+    <a class="deactivated"><i class='fas fa-cog fa-1x'></i> Configurações</a>
+    <a class="deactivated"><i class="fas fa-boxes fa-1x"></i> Produtos</a>
+    <a class="deactivated" href="#"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a> 
 
     <!-- Admin and Manager sections can be conditionally displayed here with PHP -->
     <!-- Add more details and sections as needed -->
@@ -55,8 +53,8 @@
 <div class="main-content">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <img src="https://i.pinimg.com/564x/66/a9/81/66a9818af810fdf31981405418e0ea43.jpg" width="80" class="rounded me-2" alt="...">
-            <strong class="me-auto">Olá, Pronto para registrar mais um pet?</strong>
+            <img src="https://i.pinimg.com/564x/66/a9/81/66a9818af810fdf31981405418e0ea43.jpg" width="90" class="rounded me-2" alt="...">
+            <strong class="me-auto">Agora acompanhar eu pet no banho ficou mais fácil</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>

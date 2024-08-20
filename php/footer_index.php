@@ -3,10 +3,11 @@
 </head>
 <footer class="p-3 mb-2 bg-dark-subtle text-dark-emphasis">
     <div class="d-flex flex-column align-items-center">
-        <i class="fa-solid fa-paw text-danger-emphasis" style="font-size: 5em; padding:0.5em"></i>
+        <img src="./img/logopets.png" alt="" width="15%">
+        <small><i class="fa-solid fa-paw text-danger-emphasis"></i></small>
         <p>Um pet bem-cuidado é um pet feliz, que retribui todo o amor e atenção com lealdade e carinho</p>
     </div>
-    <p class="text-center p-2"><i class="fa-solid fa-copyright"></i> Sistemas G&B 2020 - 2024</p>
+    <p class="text-center p-2"><i class="fa-solid fa-copyright"></i> Sistemas L2A 2020 - 2024</p>
     <p class="text-center p-2">Versão 1.0</p>
 
 </footer>

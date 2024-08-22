@@ -1,6 +1,6 @@
 <?php
-// Conexão com o banco de dados
-require 'conexao.php';
+  require __DIR__ . '/./bd/conexao.php';
+
 
 // Verifica se o parâmetro id foi enviado via GET
 $id = isset($_GET['id']) ? $_GET['id'] : '';

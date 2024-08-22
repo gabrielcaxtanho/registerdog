@@ -1,3 +1,10 @@
+<?php
+session_start(); 
+
+$mensagem = $_SESSION['mensagem'] ?? null;
+unset($_SESSION['mensagem']);
+?>
+
     <!DOCTYPE html>
     <html lang="pt-BR">
 
@@ -11,12 +18,6 @@
 
     <body>
         <?php include_once 'php/header_index.php'; ?>
-
-        <!--     <?php if ($mensagem) : ?>
-            <section class="mensagem">
-                <?= $mensagem ?>
-            </section>
-        <?php endif; ?> -->
 
         <div class="container">
             <div class="row justify-content-center">

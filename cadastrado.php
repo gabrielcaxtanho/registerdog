@@ -1,6 +1,6 @@
 <?php
 
-require 'conexao.php';
+require './bd/conexao.php';
 
 $nomePet = isset($_GET['nomePet']) ? $_GET['nomePet'] : '';
 

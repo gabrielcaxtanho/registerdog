@@ -1,6 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
 
+
+ #header {
+ background-image: url('../img/img.jpg');
+   /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
+    background-size: cover;
+     background-repeat: no-repeat;
+     background-position: center;
+     color: white; /* Define a cor do texto como branca para melhor contraste */
+     height: 40px; /* Define uma altura para visualizar a imagem de fundo */
+ } 
+
 .font{
     font-family: "Poetsen One", sans-serif;
     font-weight: 400;

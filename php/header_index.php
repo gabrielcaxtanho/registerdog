@@ -1,16 +1,37 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+       #header {
+        background-image: url('./img/img.jpg');
+          /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
+           background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: white; /* Define a cor do texto como branca para melhor contraste */
+            height: 40px; /* Define uma altura para visualizar a imagem de fundo */
+        }
+    </style>
 </head>
 
-<header class="header bg-light bg-gradient shadow-sm p-2">
-    <!--<img src="https://i.pinimg.com/736x/12/b3/58/12b358b908ea10e0d8ccfb37f45b01f5.jpg" alt="Header Image"> -->
-    <div class="btn-container">
+<header id="header"></header>
+
+<nav class="header bg-light bg-gradient shadow-sm p-2 d-flex justify-content-between">
+    <div class="btn-container d-flex align-items-center">
         <button class="btn btn-outline-secondary" onclick="openNav()">
-            <i class="fa-solid fa-bars-staggered"  style="font-size: 120%;"></i>
+            <i class="fa-solid fa-bars-staggered" style="font-size: 150%;"></i>
         </button>
-        <h1 class="ms-3 mb-0"></h1>
     </div>
-</header>
+    <div class="d-flex align-items-center" style="margin-right: 6%;">
+        <a href='acompanhamento.php' class="text-dark me-3">
+            <i class='fas fa-list fa-1x' style="font-size: 140%; color: cadetblue"></i>
+        </a>
+        <a href='cadastrado.php' class="text-dark">
+            <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 140%; color: cadetblue; margin: 22%;"></i>
+        </a>
+    </div>
+</nav>
+
 
 <div id="mySidenav" class="sidenav shadow font-montserrat">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
@@ -43,7 +64,7 @@
     <a href='acompanhamento.php'><i class='fas fa-list fa-1x'></i> Acompanhamento</a>
     <a class="deactivated"><i class='fas fa-cog fa-1x'></i> Configurações</a>
     <a class="deactivated"><i class="fas fa-boxes fa-1x"></i> Produtos</a>
-    <a class="deactivated" href="#"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a> 
+    <a class="deactivated" href="#"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a>
 
     <!-- Admin and Manager sections can be conditionally displayed here with PHP -->
     <!-- Add more details and sections as needed -->

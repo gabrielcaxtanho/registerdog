@@ -51,7 +51,7 @@
         }
     
         // Redireciona de volta para a página de cadastro
-        header('Location: cadastro.php');
+        header('Location: ./cadastro.php');
         exit();
     }
     ?>

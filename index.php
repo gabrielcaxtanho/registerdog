@@ -83,13 +83,9 @@
     }
     ?>
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="row justify-content-between align-items-baseline mb-4">
-<!-- 
-                   <div class="col-md-1"></div>  -->
-
-            <!-- Coluna das Informações de Cachorros e Donos -->
-            <div class="col-md-8" style="margin-left: 2%;">
+            <div class="col" style="margin-left: 2%;">
                 <hr class="border-white">
                 <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
                     <h5 class="text-ciano-agiliza">😄 Frequência!</h5>
@@ -191,15 +187,6 @@
                         </div>
                     </div> <!-- Fim do accordion -->
                 </div>
-            </div>
-            <!-- Coluna da Imagem -->
-            <div class="col-md-2 text-center">
-                <small style="font-weight: 700; border-bottom: groove; font-size: large;"> <i class="fa-regular fa-hand-point-down fa-bounce" style="font-size: x-large"></i> Conheça também o site</small>
-                <h4 style="margin-bottom: 6%;"></h4>
-                <a href="https://gabrielcaxtanho.github.io/betoplus/" target="_blank" class="image-link">
-                    <img src="https://private-user-images.githubusercontent.com/96641560/339418336-d8ac7024-9443-45d8-a94e-908a93d01650.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjM5MzYyODQsIm5iZiI6MTcyMzkzNTk4NCwicGF0aCI6Ii85NjY0MTU2MC8zMzk0MTgzMzYtZDhhYzcwMjQtOTQ0My00NWQ4LWE5NGUtOTA4YTkzZDAxNjUwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA4MTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwODE3VDIzMDYyNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTFmYTAzMTM2MzRhYmJkMjA3YTRmMWFiNDViNzZiODUyOWU1ZDMwMDM2ZmEzOWIyMjQwMjdkZGMzZWRiYmVhOGQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.OJkDXWE72UI-mPse5cfahORgi6tzzsEFx5wSDre3hsM" alt="cachorro da raça pug com um brasão, para divulgar um site de rastreio animal. Clique para conhecer o site" class="image">
-                    <span class="overlay-text">Clique para conhecer o site</span>
-                </a>
             </div>
         </div>
     </div>

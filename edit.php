@@ -207,7 +207,7 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="mb-3">
                             <label for="observacoes" class="form-label" style="font-family: cursive; font-size: larger;">Observações:</label>
-                            <textarea id="observacoes" name="observacoes" class="form-control"><?= htmlspecialchars($pet['observacoes']) ?></textarea>
+                            <textarea id="observacoes" name="observacoes" class="form-control" value="<?php echo $row['omObs']; ?>"></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
@@ -219,7 +219,7 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <h4 class="text-center"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i> editar informações do Pet <strong style="text-transform: uppercase; color: #4b6d89;"><?= htmlspecialchars($pet['nomePet']) ?></strong></h4>
+                <h4 class="text-center"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px;"></i> adicionar serviços do Pet <strong style="text-transform: uppercase; color: #4b6d89;"><?= htmlspecialchars($pet['nomePet']) ?></strong></h4>
                 <hr class="border-white">
                 <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
                     <form id="editForm" method="post" action="salvar_edicao.php">

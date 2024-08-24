@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Editar Pet</title>
+    <title>Acompanhamento</title>
+    <link rel="icon" href="img/logopets1.png" type="image">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/petcadastrado.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,6 +13,17 @@
 
 <body>
     <?php include_once 'php/header_index.php'; ?>
+
+    <div class="main-content">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="https://i.pinimg.com/564x/66/a9/81/66a9818af810fdf31981405418e0ea43.jpg" width="90" class="rounded me-2" alt="...">
+                <strong class="me-auto">Agora acompanhar eu pet no banho ficou mais fácil</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
 
     <div class="container my-5">
         <div class="row justify-content-center">
@@ -65,12 +77,12 @@
     </div>
 
     <div style="background-color: #f8f9fa; padding: 20px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; margin: 2% 4% 2% auto; font-size: 1.3em; max-width: 300px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-    <a class="icon-link icon-link-hover text-decoration-none" style="--bs-link-hover-color-rgb: 25, 135, 84; color: #dc3545; display: inline-table;" href="https://gabrielcaxtanho.github.io/betoplus/" target="_blank">
-        click e acesse 
-        <strong>petResgate<i class="fa-solid fa-shield-dog"></i></strong>
-    </a>
-    <small style="color: #6c757d; margin-top: 10px;">Proteja seu pet! Faça um rastreador para sua segurança</small>
-</div>
+        <a class="icon-link icon-link-hover text-decoration-none" style="--bs-link-hover-color-rgb: 25, 135, 84; color: #dc3545; display: inline-table;" href="https://gabrielcaxtanho.github.io/betoplus/" target="_blank">
+            click e acesse
+            <strong>petResgate<i class="fa-solid fa-shield-dog"></i></strong>
+        </a>
+        <small style="color: #6c757d; margin-top: 10px;">Proteja seu pet! Faça um rastreador para sua segurança</small>
+    </div>
 
 
 

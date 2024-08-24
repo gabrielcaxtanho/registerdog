@@ -5,7 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Pet Register Dashboard</title>
+    <title>dashboard</title>
+    <link rel="icon" href="./img/logopets1.png" type="image">
+    <style>
+        /* Estilos para barras de progresso verticais */
+        .progress-vertical {
+            position: relative;
+            width: 30px;
+            /* Largura da barra de progresso */
+            height: 200px;
+            /* Altura da barra de progresso */
+            display: flex;
+            align-items: flex-end;
+            margin-right: 20px;
+            /* Espaçamento entre barras */
+        }
+
+        .progress-bar {
+            width: 100%;
+            /* Largura da barra de progresso */
+            transition: height 0.6s ease;
+            /* Transição suave para altura */
+        }
+
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+        }
+
+        .progress-bar-animated {
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-bar-stripes {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 100% 0;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -86,14 +127,19 @@
     <div class="container">
         <div class="row justify-content-between align-items-baseline mb-4">
             <div class="col" style="margin-left: 2%;">
+                <!-- Linha separadora para o título -->
                 <hr class="border-white">
+
+                <!-- Card principal -->
                 <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
-                    <h5 class="text-ciano-agiliza">😄 Frequência!</h5>
-                    <span class="text-muted">Pet e Dono</span>
+                    <h5 class="text-ciano-agiliza"><i class="fa-solid fa-ranking-star"></i> Ranking dos mais frequentes</h5>
+                    <span class="text-muted">pet e dono</span>
+
+                    <!-- Seção de estatísticas com cartões -->
                     <div class="row my-4">
                         <div class="col-md-6">
-                            <div class="card mb-3 border-primary">
-                                <div class="card-body">
+                            <div class="card mb-3 border-primary shadow-sm">
+                                <div class="card-body text-center">
                                     <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
                                     <h5 class="card-title mt-2">Dono Mais Frequente</h5>
                                     <p class="card-text"><strong>Dono:</strong> <?= htmlspecialchars($row_dono_mais_frequente['dono']) ?></p>
@@ -102,8 +148,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card mb-3 border-primary">
-                                <div class="card-body">
+                            <div class="card mb-3 border-primary shadow-sm">
+                                <div class="card-body text-center">
                                     <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
                                     <h5 class="card-title mt-2">Pet Mais Frequente</h5>
                                     <p class="card-text"><strong>Pet:</strong> <?= htmlspecialchars($row_pet_mais_frequente['pet']) ?></p>
@@ -111,85 +157,29 @@
                                 </div>
                             </div>
                         </div>
+
+                        <h5 class="text-ciano-agiliza" style="margin-top:2em"><i class="fa-solid fa-chart-line"></i> Frequência de atendimentos!</h5>
+                        <span class="text-muted">atendimentos mais solicitados</span>
+
+                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em; margin-top:2em" role="progressbar" aria-label="Animated Success striped example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 25%">tosa</div>
+                        </div>
+                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 50%">banho e tosa</div>
+                        </div>
+                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Warning striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 75%">banho</div>
+                        </div>
+                        <!-- <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Danger striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: 100%">banho</div>
+                        </div> -->
                     </div>
-                    <div class="d-flex justify-content-around mb-4">
-                        <button class="btn btn-circle btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas">
-                            <i class="fa-solid fa-users-viewfinder text-white"></i>
-                        </button>
-                        <button class="btn btn-circle btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRacas">
-                            <i class="fa-solid fa-paw text-white"></i>
-                        </button>
-                        <button class="btn btn-circle btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicos">
-                            <i class="fa-solid fa-hand-holding-dollar text-white"></i>
-                        </button>
-                    </div>
-                    <div class="accordion" id="accordionExample">
-                        <!-- Visitas por Dono -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingVisitas">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisitas">
-                                    <i class="fa-solid fa-users-viewfinder"></i> Visitas por Dono
-                                </button>
-                            </h2>
-                            <div id="collapseVisitas" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <!-- PHP loop para listar as visitas -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Raças Mais Frequentes -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingRacas">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRacas">
-                                    <i class="fa-solid fa-paw"></i> Raças Mais Frequentes
-                                </button>
-                            </h2>
-                            <div id="collapseRacas" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Raça</th>
-                                                <th>Frequência</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- PHP loop para listar as raças mais frequentes -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Serviços Mais Solicitados -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingServicos">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseServicos">
-                                    <i class="fa-solid fa-hand-holding-dollar"></i> Serviços Mais Solicitados
-                                </button>
-                            </h2>
-                            <div id="collapseServicos" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Serviço</th>
-                                                <th>Frequência</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- PHP loop para listar os serviços mais solicitados -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- Fim do accordion -->
                 </div>
             </div>
         </div>
+
     </div>
+
 
     <style>
         .image-link {

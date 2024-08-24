@@ -12,7 +12,7 @@ unset($_SESSION['mensagem']);
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cadastro de Pets</title>
+        <title>perfil</title>
         <link rel="icon" href="img/logopets1.png" type="image">
         <link rel="stylesheet" href="./css/style.css">
     </head>
@@ -23,30 +23,30 @@ unset($_SESSION['mensagem']);
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10">
-                    <h2 class="text-center" id="font">Cadastrar Pet</h2>
+                    <h2 class="text-center" id="font">Meu Perfil</h2>
                     <hr class="border-white">
                     <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
                         <form id="includes/addPet.ini.php" method="post" action="includes/addPet.ini.php">
                              <!-- Corrigido para o arquivo correto -->
                             <div class="mb-3">
-                                <label for="raca" class="form-label"><strong>Raça</strong><b style="color: #ff0000;">*</b></label>
+                                <label for="raca" class="form-label"><strong>Nome e Sobrenome</strong><b style="color: #ff0000;">*</b></label>
                                 <input class="form-control" type="text" id="raca" name="raca" required>
                             </div>
                             <div class="mb-3">
-                                <label for="nomePet" class="form-label"><strong>Nome do Pet</strong><b style="color: #ff0000;">*</b></label>
+                                <label for="nomePet" class="form-label"><strong>Nome fantasia</strong><b style="color: #ff0000;">*</b></label>
                                 <input class="form-control" type="text" id="nomePet" name="nomePet" required>
                             </div>
                             <div class="mb-3">
-                                <label for="nomeTutor" class="form-label"><strong>Nome do Tutor</strong><b style="color: #ff0000;">*</b></label>
+                                <label for="nomeTutor" class="form-label"><strong>Cidade</strong><b style="color: #ff0000;">*</b></label>
                                 <input class="form-control" type="text" id="nomeTutor" name="nomeTutor" required>
                             </div>
                             <div class="mb-3">
-                                <label for="contatoTutor" class="form-label"><strong>Contato</strong><b style="color: #ff0000;">*</b></label>
+                                <label for="contatoTutor" class="form-label"><strong>Telefone</strong><b style="color: #ff0000;">*</b></label>
                                 <input class="form-control" type="text" id="contatoTutor" name="contatoTutor" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label"><strong>Serviços</strong><b style="color: #ff0000;">*</b></label>
-                                <div class="form-check">
+                                <label class="form-label"><strong>Estado</strong><b style="color: #ff0000;">*</b></label>
+                                <!-- <div class="form-check">
                                     <input class="form-check-input" type="radio" name="descricao" value="Banho" required>
                                     <label class="form-check-label" for="banho">Banho</label>
                                 </div>
@@ -57,14 +57,14 @@ unset($_SESSION['mensagem']);
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="descricao" value="Banho e Tosa">
                                     <label class="form-check-label" for="banhoTosa">Banho e Tosa</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="mb-3">
                                 <label for="observacao" class="form-label"><strong>Observações</strong></label>
                                 <input class="form-control" type="text" id="observacao" name="observacao">
                             </div>
                             <div class="card-footer bg-transparent text-center">
-                                <button type="submit" class="btn btn-primary w-100 mb-3">Cadastrar Pet</button>
+                                <button type="submit" class="btn btn-primary w-100 mb-3">atualizar perfil</button>
                                 <a href="./index.php" class="text-danger text-decoration-underline">Cancelar</a>
                             </div>
                         </form>

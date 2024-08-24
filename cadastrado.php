@@ -49,14 +49,12 @@ if (!empty($nomePet)) {
     <link rel="icon" href="img/logopets1.png" type="image">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
 <body>
     <?php include_once 'php/header_index.php'; ?>
     <main class="font">
-        <h1>PET REGISTER</h1>
-        <h3>TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h3>
-
         <h2>Registros de Pets</h2>
 
         <div class="container my-4">
@@ -73,8 +71,33 @@ if (!empty($nomePet)) {
             </div>
         </div>
 
-        <!-- Exiba a seção de resultados apenas se houver resultados -->
-        <?php if (!empty($results)): ?>
+        <!-- Verifique se o campo de pesquisa está vazio -->
+        <?php if (empty($nomePet)): ?>
+             <!-- Card com placeholders -->
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="card" aria-hidden="true">
+                            <div class="card-body">
+                                <h5 class="card-title placeholder-glow">
+                                    <span class="placeholder col-10"></span>
+                                </h5>
+                                <p class="card-text placeholder-glow p-2">
+                                    <span class="placeholder col-10"></span>
+                                    <span class="placeholder col-10"></span>
+                                    <span class="placeholder col-10"></span>
+                                    <span class="placeholder col-10"></span>
+                                    <span class="placeholder col-10"></span>
+                                    <span class="placeholder col-10"></span>
+                                </p>
+                                <a class="btn btn-primary disabled placeholder col-10" aria-disabled="true"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        <?php elseif (!empty($results)): ?>
+            <!-- Exiba a seção de resultados apenas se houver resultados -->
             <div class="container">
                 <section class="resultado" id="secaoPets">
                     <div class="row justify-content-center">
@@ -90,7 +113,6 @@ if (!empty($nomePet)) {
                                         <p class="card-text text-secondary">
                                             <strong>Data do Cadastro:</strong>
                                             <?php
-                                            // Verifica se a dataVisita não é nula ou vazia
                                             if (!empty($row['dataVisita'])) {
                                                 $dataVisita = new DateTime($row['dataVisita']);
                                                 echo $dataVisita->format('d-m-Y');
@@ -99,7 +121,6 @@ if (!empty($nomePet)) {
                                             }
                                             ?>
                                         </p>
-
                                         <p class="card-text text-secondary"><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
                                     </div>
                                     <hr>

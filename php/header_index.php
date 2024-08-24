@@ -2,14 +2,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css">
     <style>
-       #header {
-        background-image: url('./img/img.jpg');
-          /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
-           background-size: cover;
+        #header {
+            background-image: url('./img/img.jpg');
+            /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
+            background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            color: white; /* Define a cor do texto como branca para melhor contraste */
-            height: 40px; /* Define uma altura para visualizar a imagem de fundo */
+            color: white;
+            height: 40px;
         }
     </style>
 </head>
@@ -23,10 +23,10 @@
         </button>
     </div>
     <div class="d-flex align-items-center" style="margin-right: 6%;">
-        <a href='acompanhamento.php' class="text-dark me-3">
+        <a href='acompanhamento.php' title="acompanhamento" class="text-dark me-3">
             <i class='fas fa-list fa-1x' style="font-size: 140%; color: cadetblue"></i>
         </a>
-        <a href='cadastrado.php' class="text-dark">
+        <a href='cadastrado.php' class="text-dark" title="pet cadastrado">
             <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 140%; color: cadetblue; margin: 22%;"></i>
         </a>
     </div>
@@ -58,7 +58,7 @@
     </div>
 
     <a href="index.php"><i class="fas fa-home fa-1x"></i> Início</a>
-    <a href=""><i class="far fa-id-badge"></i> Meu Perfil</a>
+    <a href="perfil.php"><i class="far fa-id-badge"></i> Meu Perfil</a>
     <a href='cadastro.php'><i class="fa-solid fa-address-card"></i></i> Cadastro</a>
     <a href='cadastrado.php'><i class="fa-solid fa-magnifying-glass-chart"></i> Pet Cadastrado</a>
     <a href='acompanhamento.php'><i class='fas fa-list fa-1x'></i> Acompanhamento</a>
@@ -71,15 +71,6 @@
 
 </div>
 
-<div class="main-content">
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="https://i.pinimg.com/564x/66/a9/81/66a9818af810fdf31981405418e0ea43.jpg" width="90" class="rounded me-2" alt="...">
-            <strong class="me-auto">Agora acompanhar eu pet no banho ficou mais fácil</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
 
 <style>
     .sidenav {

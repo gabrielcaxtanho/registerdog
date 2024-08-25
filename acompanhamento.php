@@ -10,15 +10,28 @@
     <link rel="stylesheet" href="css/petcadastrado.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    #header {
+        background-image: url('./img/img.jpg');
+        /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        color: white;
+        height: 4em;
+    }
+</style>
+
+
+<header id="header"></header>
 
 <body>
-    <?php include_once 'php/header_index.php'; ?>
 
     <div class="main-content">
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <img src="https://i.pinimg.com/564x/66/a9/81/66a9818af810fdf31981405418e0ea43.jpg" width="90" class="rounded me-2" alt="...">
-                <strong class="me-auto">Agora acompanhar eu pet no banho ficou mais fácil</strong>
+                <strong class="me-auto">Agora acompanhar seu pet no banho ficou mais fácil</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
@@ -86,7 +99,7 @@
 
 
 
-    <?php include_once 'php/footer_index.php'; ?>
+  <!--   <?php include_once 'php/footer_index.php'; ?> -->
 
     <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

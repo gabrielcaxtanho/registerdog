@@ -21,6 +21,29 @@
         color: white;
         height: 4em;
     }
+
+    .d-flex-de {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .fa-paw {
+        font-size: 24px;
+        color: #dc3545;
+    }
 </style>
 </head>
 
@@ -30,14 +53,14 @@
 
     <div class="container-fluid" style="margin-top:8em">
         <div class="row justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
                 <div class="font">
                     <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
-                    <small class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</small>
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="./img/logopets.png" alt="" width="50%">
+                    <h4 class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h4>
+                    <div class="d-flex-de flex-column align-items-center p-3 bg-light rounded shadow-sm" style="margin-top: 3em;">
+                        <!--  <img src="./img/logopets.png" alt="Logo Pets" width="50%"> -->
+                        <p class="text-secondary text-center mb-2">Otimize o atendimento e melhore a experiência dos seus clientes peludos, garantindo um serviço mais eficiente e personalizado. Registre-se agora e simplifique a gestão do seu estabelecimento!</p>
                         <small><i class="fa-solid fa-paw text-danger-emphasis"></i></small>
-                        <p class="text-secondary">"Um pet bem-cuidado é um pet feliz, que retribui todo o amor e atenção com lealdade e carinho"</p>
                     </div>
                 </div>
             </div>

@@ -97,7 +97,6 @@ if (!empty($nomePet)) {
                 </div>
             </div> 
         <?php elseif (!empty($results)): ?>
-            <!-- Exiba a seção de resultados apenas se houver resultados -->
             <div class="container">
                 <section class="resultado" id="secaoPets">
                     <div class="row justify-content-center">

@@ -25,9 +25,10 @@ unset($_SESSION['mensagem']);
         <div class="col-md-10">
             <h2 class="text-center" id="font">SUPORTE REGISTERPET</h2>
             <hr class="border-white">
-            <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
-                <p>Para receber suporte, preencha o formulário clicando no botão abaixo:</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdEHMlDspNFkQFvDJX9DSupMNYP62krAAcFGW4VoJx-KGJcng/viewform?usp=sf_link" class="btn btn-primary">Acessar Formulário de Suporte</a>
+            <div class="shadow rounded p-4 mb-4 text-center" style="border-top: #2e8a97 7px solid;">
+                <p>Para receber suporte, preencha o formulário clicando no botão abaixo e detalhe os problemas</p>
+                <p>Para que uma equipe de suporte possa entrar em contato</p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdEHMlDspNFkQFvDJX9DSupMNYP62krAAcFGW4VoJx-KGJcng/viewform?usp=sf_link" class="btn btn-primary  ">Acessar Formulário de Suporte</a>
             </div>
         </div>
     </div>

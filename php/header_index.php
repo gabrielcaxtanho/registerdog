@@ -64,7 +64,7 @@
     <a href='acompanhamento.php'><i class='fas fa-list fa-1x'></i> Acompanhamento</a>
     <a class="deactivated"><i class='fas fa-cog fa-1x'></i> Configurações</a>
     <a class="deactivated"><i class="fas fa-boxes fa-1x"></i> Produtos</a>
-    <a class="deactivated" href="#"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a>
+    <a href="suporte.php"><i class="far fa-life-ring fa-1x mr-1"></i> Suporte</a>
 
     <!-- Admin and Manager sections can be conditionally displayed here with PHP -->
     <!-- Add more details and sections as needed -->

@@ -45,7 +45,7 @@ if (!empty($nomePet)) {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Pets Cadastrados</title>
+    <title>Historico</title>
     <link rel="icon" href="img/logopets1.png" type="image">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/style.css">
@@ -55,7 +55,7 @@ if (!empty($nomePet)) {
 <body>
     <?php include_once 'php/header_index.php'; ?>
     <main class="font">
-        <h2>Registros de Pets</h2>
+        <h2>Historico de Pets</h2>
 
         <div class="container my-4">
             <div class="row justify-content-center">

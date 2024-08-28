@@ -44,18 +44,46 @@
         font-size: 24px;
         color: #dc3545;
     }
+
+    .error {
+        background-color: #d5feff;
+        color: #cd0505;
+        ;
+        text-align: center;
+        padding: 1em;
+    }
+
+    .success {
+        background-color: #31b7bb;
+        color: white;
+        text-align: center;
+        padding: 1em;
+    }
 </style>
 </head>
 
 <header id="header"></header>
 
 <body>
+    <?php
+    include_once './bd/conexao.php';
+    ?>
 
-    <div class="container-fluid" style="margin-top:8em">
-        <div class="row justify-content-center">
-            <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
-                <div class="font">
-                    <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
+<div class="container">
+    <div class="row py-4">
+        <div class="col">
+        <div class="font">
+            <h3 class="text-center fw-bold"><b>NOVO USUÁRIO</b></h3>
+        </div>
+        </div>
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
+            <div class="font">
+                <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
                     <h4 class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h4>
                     <div class="d-flex-de flex-column align-items-center p-3 bg-light rounded shadow-sm" style="margin-top: 3em;">
                         <!--  <img src="./img/logopets.png" alt="Logo Pets" width="50%"> -->
@@ -65,12 +93,30 @@
                 </div>
             </div>
             <div class="col-md-6">
+                <div>
+                    <?php
+                    if (isset($_GET['error'])) {
+                        if ($_GET['error'] == "stmtfailed") {
+                            echo "<p class='error'>Erro ao processar o pedido. Por favor, tente novamente.</p>";
+                        } else if ($_GET['error'] == "userorexists") {
+                            echo "<p class='error'>Nome de usuário ou celular já estão em uso.</p>";
+                        } else if ($_GET['error'] == "executionfailed") {
+                            echo "<p class='error'>Erro ao inserir dados. Por favor, tente novamente.</p>";
+                        }
+                    } else if (isset($_GET['success'])) {
+                        if ($_GET['success'] == "usercreated") {
+                            echo "<p class='success'>Usuário criado com sucesso!</p>";
+                        }
+                    }
+                    ?>
+
+                </div>
                 <hr class="border-white">
                 <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
-                    <form id="registrationForm" class="row g-3 needs-validation" novalidate>
+                    <form id="registrationForm" action="includes/cadastro.inc.php" method="POST" class="row g-3 needs-validation" novalidate>
                         <div class="col-md-6">
                             <label for="validationServer01" class="form-label">Nome e Sobrenome</label>
-                            <input type="text" class="form-control" id="validationServer01" minlength="9" required>
+                            <input type="text" class="form-control" id="validationServer01" name="nomeSobrenome" minlength="9" required>
                             <div class="invalid-feedback">
                                 Nome e Sobrenome deve ter pelo menos 5 caracteres.
                             </div>
@@ -78,7 +124,7 @@
 
                         <div class="col-md-6">
                             <label for="validationServer02" class="form-label"><strong> Nome do PetShop </strong></label>
-                            <input type="text" class="form-control" id="validationServer02" minlength="5" required>
+                            <input type="text" class="form-control" id="validationServer02" name="nomePetShop" minlength="5" required>
                             <div class="invalid-feedback">
                                 Nome fantasia deve ter pelo menos 5 caracteres.
                             </div>
@@ -88,7 +134,7 @@
                             <label for="validationServerUsername" class="form-label">Nome de usuário</label>
                             <div class="input-group">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" id="validationServerUsername" minlength="5" required>
+                                <input type="text" class="form-control" id="validationServerUsername" name="userName" minlength="5" required>
                                 <div class="invalid-feedback">
                                     Nome de usuário deve ter pelo menos 5 caracteres.
                                 </div>
@@ -101,7 +147,7 @@
                                 <span class="input-group-text">
                                     <i class="fa-solid fa-eye-slash" id="togglePassword1" style="cursor: pointer;"></i>
                                 </span>
-                                <input type="password" class="form-control" id="password1" required>
+                                <input type="password" class="form-control" id="password1" name='password' required>
                                 <div class="invalid-feedback">
                                     Senha é obrigatória.
                                 </div>
@@ -114,7 +160,7 @@
                                 <span class="input-group-text">
                                     <i class="fa-solid fa-eye-slash" id="togglePassword2" style="cursor: pointer;"></i>
                                 </span>
-                                <input type="password" class="form-control" id="password2" required>
+                                <input type="password" class="form-control" id="password2" name='confirmpassword' required>
                                 <div class="invalid-feedback">
                                     Senha deve corresponder.
                                 </div>
@@ -123,7 +169,7 @@
 
                         <div class="col-md-6">
                             <label for="validationServer03" class="form-label">Cidade</label>
-                            <input type="text" class="form-control" id="validationServer03" required>
+                            <input type="text" class="form-control" id="validationServer03" name="cidade" required>
                             <div class="invalid-feedback">
                                 Por favor, informe uma cidade válida.
                             </div>
@@ -131,9 +177,35 @@
 
                         <div class="col-md-3">
                             <label for="validationServer04" class="form-label">Estado</label>
-                            <select class="form-select" id="validationServer04" required>
+                            <select class="form-select" id="validationServer04" name='estado' required>
                                 <option selected disabled value="">Escolha...</option>
-                                <option>...</option>
+                                <option value="AC">Acre (AC)</option>
+                                <option value="AL">Alagoas (AL)</option>
+                                <option value="AP">Amapá (AP)</option>
+                                <option value="AM">Amazonas (AM)</option>
+                                <option value="BA">Bahia (BA)</option>
+                                <option value="CE">Ceará (CE)</option>
+                                <option value="DF">Distrito Federal (DF)</option>
+                                <option value="ES">Espírito Santo (ES)</option>
+                                <option value="GO">Goiás (GO)</option>
+                                <option value="MA">Maranhão (MA)</option>
+                                <option value="MT">Mato Grosso (MT)</option>
+                                <option value="MS">Mato Grosso do Sul (MS)</option>
+                                <option value="MG">Minas Gerais (MG)</option>
+                                <option value="PA">Pará (PA)</option>
+                                <option value="PB">Paraíba (PB)</option>
+                                <option value="PR">Paraná (PR)</option>
+                                <option value="PE">Pernambuco (PE)</option>
+                                <option value="PI">Piauí (PI)</option>
+                                <option value="RJ">Rio de Janeiro (RJ)</option>
+                                <option value="RN">Rio Grande do Norte (RN)</option>
+                                <option value="RS">Rio Grande do Sul (RS)</option>
+                                <option value="RO">Rondônia (RO)</option>
+                                <option value="RR">Roraima (RR)</option>
+                                <option value="SC">Santa Catarina (SC)</option>
+                                <option value="SP">São Paulo (SP)</option>
+                                <option value="SE">Sergipe (SE)</option>
+                                <option value="TO">Tocantins (TO)</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, selecione um estado válido.
@@ -142,7 +214,7 @@
 
                         <div class="col-md-3">
                             <label for="validationServer05" class="form-label">Telefone</label>
-                            <input type="text" class="form-control" id="validationServer05" required placeholder="(xx) xxxxx-xxxx">
+                            <input type="text" class="form-control" id="validationServer05" name="celular" required placeholder="(xx) xxxxx-xxxx">
                             <div class="invalid-feedback">
                                 Por favor, informe um número de telefone válido.
                             </div>
@@ -161,7 +233,7 @@
                         </div>
 
                         <div class="col-12">
-                            <button class="btn btn-primary" type="submit">Enviar formulário</button>
+                            <button class="btn btn-primary" type='submit' name='submit' id='submit'>Cadastrar</button>
                         </div>
                     </form>
                 </div>
@@ -169,7 +241,41 @@
         </div>
     </div>
 
+    <div class="card-footer text-center">
+        <div class="">
+            <a href="login">
+                <div class="alert alert-secondary">Já tenho cadastro! Acessar</div>
+            </a>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showPass() {
+
+            event.preventDefault();
+            var passInput = document.getElementById('login-input-2');
+            if (passInput.type == 'password') {
+                passInput.type = 'text';
+                console.log('mostrou');
+            } else {
+                passInput.type = 'password';
+                console.log('escondeu');
+            }
+        }
+
+        function verifyEspec(elem) {
+
+            var elem = elem.value;
+
+            if (elem == 'outros') {
+                document.getElementById('outraespec').hidden = false;
+
+            } else {
+                document.getElementById('outraespec').hidden = true;
+            }
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const togglePassword1 = document.getElementById('togglePassword1');

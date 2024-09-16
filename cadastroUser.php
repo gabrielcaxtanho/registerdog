@@ -79,7 +79,7 @@
 
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" >
     <div class="row justify-content-center">
         <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
             <div class="font">
@@ -116,7 +116,7 @@
                     <form id="registrationForm" action="includes/cadastro.inc.php" method="POST" class="row g-3 needs-validation" novalidate>
                         <div class="col-md-6">
                             <label for="validationServer01" class="form-label">Nome e Sobrenome</label>
-                            <input type="text" class="form-control" id="validationServer01" name="nomeSobrenome" minlength="9" required>
+                            <input type="text" class="form-control" id="validationServer01" name="userName" minlength="9" required>
                             <div class="invalid-feedback">
                                 Nome e Sobrenome deve ter pelo menos 5 caracteres.
                             </div>
@@ -134,7 +134,7 @@
                             <label for="validationServerUsername" class="form-label">Nome de usuário</label>
                             <div class="input-group">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" id="validationServerUsername" name="userName" minlength="5" required>
+                                <input type="text" class="form-control" id="validationServerUsername" name="usersEmail" minlength="5" required>
                                 <div class="invalid-feedback">
                                     Nome de usuário deve ter pelo menos 5 caracteres.
                                 </div>
@@ -244,7 +244,7 @@
     <div class="card-footer text-center">
         <div class="">
             <a href="login">
-                <div class="alert alert-secondary">Já tenho cadastro! Acessar</div>
+                <div class="alert-secondary">Já tenho cadastro! Acessar</div>
             </a>
         </div>
     </div>

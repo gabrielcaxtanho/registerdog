@@ -55,9 +55,9 @@ if (!empty($nomePet)) {
 <body>
     <?php include_once 'php/header_index.php'; ?>
     <main class="font">
-        <h2>Historico de Pets</h2>
+       <!--  <h2>Historico de Pets</h2> -->
 
-        <div class="container my-4">
+        <!-- <div class="container my-4">
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <form id="pesquisa" method="get" action="">
@@ -69,75 +69,142 @@ if (!empty($nomePet)) {
                     </form>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <!-- Verifique se o campo de pesquisa está vazio -->
-        <?php if (empty($nomePet)): ?>
-             <!-- Card com placeholders -->
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-4 mb-4 text-center">
-                        <div class="card" aria-hidden="true">
-                            <div class="card-body">
-                                <h5 class="card-title placeholder-glow">
-                                    <span class="placeholder col-10"></span>
-                                </h5>
-                                <p class="card-text placeholder-glow p-2">
-                                    <span class="placeholder col-10"></span>
-                                    <span class="placeholder col-10"></span>
-                                    <span class="placeholder col-10"></span>
-                                    <span class="placeholder col-10"></span>
-                                    <span class="placeholder col-10"></span>
-                                    <span class="placeholder col-10"></span>
-                                </p>
-                                <a class="btn btn-primary disabled placeholder col-10" aria-disabled="true"></a>
+        <!-- Card com placeholders -->
+        <div class="container-fluid py-4">
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-sm-10">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-sm d-flex justify-content-start" style="flex-direction: column;">
+                            <h5 class="text-muted"><b>Log de Atividades</b></h5>
+                            <small class="text-muted">Historico de Pets</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container my-4">
+                        <div class="row justify-content-end">
+                            <div class="col-md-3">
+                                <form id="pesquisa" method="get" action="">
+                                    <div class="mb-3">
+                                        <label for="nomePet" class="form-label">Pesquisar</label>
+                                        <input type="text" class="form-control" id="nomePet" name="nomePet" value="<?= htmlspecialchars($nomePet) ?>" placeholder="Digite o nome do pet">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-30" id="submit">Buscar</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div> 
-        <?php elseif (!empty($results)): ?>
-            <div class="container">
-                <section class="resultado" id="secaoPets">
-                    <div class="row justify-content-center">
-                        <?php foreach ($results as $row): ?>
-                            <div class="col-md-4 mb-4">
-                                <div class="shadow rounded p-4 mb-4">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-center text-secondary" style="text-transform: uppercase;"><?= htmlspecialchars($row['nomePet']) ?></h5>
-                                        <hr style="border-top: #2e8a97 7px solid;">
-                                        <p class="card-text text-secondary"><strong>Raça:</strong> <?= htmlspecialchars($row['raca']) ?></p>
-                                        <p class="card-text text-secondary"><strong>Nome do Tutor:</strong> <?= htmlspecialchars($row['nomeTutor']) ?></p>
-                                        <p class="card-text text-secondary"><strong>Contato do Tutor:</strong> <?= htmlspecialchars($row['contatoTutor']) ?></p>
-                                        <p class="card-text text-secondary">
-                                            <strong>Data do Cadastro:</strong>
+
+                    <?php if (empty($nomePet)): ?>
+                        <div class="">
+                            <div class="card-body">
+                                <div class="content-panel" style="overflow-x: scroll;">
+                                    <table id="table" class="table table-striped table-advance table-hover">
+
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Responsável</th>
+                                                <th>Pet</th>
+                                                <th>Raça</th>
+                                                <th>Data/Hora</th>
+                                                <th>Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <?php
-                                            if (!empty($row['dataVisita'])) {
-                                                $dataVisita = new DateTime($row['dataVisita']);
-                                                echo $dataVisita->format('d-m-Y');
-                                            } else {
-                                                echo 'Data não disponível';
-                                            }
+                                            $ret = mysqli_query($conn, "SELECT * FROM logatividades ORDER BY logId DESC;");
+
+                                            while ($row = mysqli_fetch_array($ret)) {
+                                                $OsRef = $row['logOsRef'];
+                                                $Horario = $row['logHorario'];
+                                                $User = $row['logUser'];
+                                                $Status = $row['logStatus'];
+
+                                                switch ($Status) {
+                                                    case 'PAUSADO':
+                                                        $badgeStatus = "badge-danger";
+                                                        break;
+                                                    case 'EM ANDAMENTO':
+                                                        $badgeStatus = "badge-warning";
+                                                        break;
+                                                    case 'CONCLUÍDO':
+                                                        $badgeStatus = "badge-success";
+                                                        break;
+                                                    case 'CRIADO':
+                                                        $badgeStatus = "badge-info";
+                                                        break;
+
+                                                    default:
+                                                        $badgeStatus = "badge-secondary";
+                                                        break;
+                                                }
+
+                                                /* $data = dateAndHourFormat($Horario); */
+
                                             ?>
-                                        </p>
-                                        <p class="card-text text-secondary"><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
-                                    </div>
-                                    <hr>
-                                    <div class="card-footer bg-transparent text-center">
-                                        <a class="btn" style="color: mediumblue;" href="edit.php?id=<?= $row['petId'] ?>"><i class="fa-solid fa-pencil"></i> Editar</a>
-                                    </div>
+
+                                                <tr>
+                                                    <td><?php echo $OsRef; ?></td>
+                                                    <td><?php echo $data; ?></td>
+                                                    <td><?php echo $User; ?></td>
+                                                    <td><span class="badge <?php echo $badgeStatus; ?>"><?php echo $Status; ?></span></td>
+                                                </tr>
+                                            <?php
+                                            } ?>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
+                        </div>
+                </div>
             </div>
-        <?php elseif (!empty($nomePet)): ?>
-            <!-- Mensagem quando não há resultados -->
-            <div class="col-md-8 offset-md-2">
-                <p>Nenhum pet encontrado com o nome "<?php echo htmlspecialchars($nomePet); ?>"</p>
-            </div>
-        <?php endif; ?>
+        </div>
+    <?php elseif (!empty($results)): ?>
+        <div class="container">
+            <section class="resultado" id="secaoPets">
+                <div class="row justify-content-center">
+                    <?php foreach ($results as $row): ?>
+                        <div class="col-md-4 mb-4">
+                            <div class="shadow rounded p-4 mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center text-secondary" style="text-transform: uppercase;"><?= htmlspecialchars($row['nomePet']) ?></h5>
+                                    <hr style="border-top: #2e8a97 7px solid;">
+                                    <p class="card-text text-secondary"><strong>Raça:</strong> <?= htmlspecialchars($row['raca']) ?></p>
+                                    <p class="card-text text-secondary"><strong>Nome do Tutor:</strong> <?= htmlspecialchars($row['nomeTutor']) ?></p>
+                                    <p class="card-text text-secondary"><strong>Contato do Tutor:</strong> <?= htmlspecialchars($row['contatoTutor']) ?></p>
+                                    <p class="card-text text-secondary">
+                                        <strong>Data do Cadastro:</strong>
+                                        <?php
+                                        if (!empty($row['dataVisita'])) {
+                                            $dataVisita = new DateTime($row['dataVisita']);
+                                            echo $dataVisita->format('d-m-Y');
+                                        } else {
+                                            echo 'Data não disponível';
+                                        }
+                                        ?>
+                                    </p>
+                                    <p class="card-text text-secondary"><strong>Observações:</strong> <?= htmlspecialchars($row['observacoes']) ?></p>
+                                </div>
+                                <hr>
+                                <div class="card-footer bg-transparent text-center">
+                                    <a class="btn" style="color: mediumblue;" href="edit.php?id=<?= $row['petId'] ?>"><i class="fa-solid fa-pencil"></i> Editar</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        </div>
+    <?php elseif (!empty($nomePet)): ?>
+        <!-- Mensagem quando não há resultados -->
+        <div class="col-md-8 offset-md-2">
+            <p>Nenhum pet encontrado com o nome "<?php echo htmlspecialchars($nomePet); ?>"</p>
+        </div>
+    <?php endif; ?>
     </main>
     <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
     <?php include_once 'php/footer_index.php'; ?>

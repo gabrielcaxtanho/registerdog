@@ -1,3 +1,9 @@
+<?php
+
+if (isset($_SESSION["userEmail"])) {
+    require_once("includes/functions.inc.php");
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -55,74 +61,94 @@
     <?php
     require './bd/conexao.php';
 
-
     $nomePet = isset($_GET['nomePet']) ? $_GET['nomePet'] : '';
-    $sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, d.contato AS contatoTutor, 
-                   s.descricao AS servicospet, s.observacoes, v.dataVisita 
-                   FROM pets p 
-                   LEFT JOIN racas r ON p.raca_id = r.id 
-                   LEFT JOIN donos d ON p.dono_id = d.id 
-                   LEFT JOIN visitaspet v ON p.id = v.pet_id 
-                   LEFT JOIN servicos s ON v.servico_id = s.id 
-                   WHERE p.nome LIKE :nomePet";
-    $stmt_select = $dbh->prepare($sql_select);
-    $stmt_select->bindValue(':nomePet', "%$nomePet%");
+
+    // Consulta para buscar os dados do pet
+    $sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, d.telefone AS contatoTutor, 
+               s.descricao AS servicospet, f.observacao, f.dataVisita 
+               FROM pets p 
+               LEFT JOIN racas r ON p.id = r.idpet 
+               LEFT JOIN donos d ON p.idDono = d.id 
+               LEFT JOIN frequencia f ON p.id = f.idPet 
+               LEFT JOIN servico s ON f.idServico = s.id 
+               WHERE p.nome LIKE ?";
+
+    // Prepara a consulta
+    $stmt_select = $conn->prepare($sql_select);
+
+    if ($stmt_select === false) {
+        // Erro ao preparar a consulta
+        die('Erro ao preparar a consulta SQL: ' . $conn->error);
+    }
+
+    $param = "%$nomePet%";
+    $stmt_select->bind_param("s", $param);
     $stmt_select->execute();
+    $result_select = $stmt_select->get_result();
 
+    // Verifica se a consulta executou corretamente
+    if (!$result_select) {
+        die('Erro ao executar a consulta SQL: ' . $stmt_select->error);
+    }
 
-    $sql_racas_frequentes = "SELECT r.nome AS raca, COUNT(v.id) AS frequencia
-                             FROM visitaspet v
-                             JOIN pets p ON v.pet_id = p.id
-                             JOIN racas r ON p.raca_id = r.id
-                             GROUP BY r.nome
+    // Outras consultas que não precisam de prepared statements
+
+    // Consulta para raças mais frequentes
+    $sql_racas_frequentes = "SELECT r.nome AS raca, COUNT(f.id) AS frequencia
+                         FROM frequencia f
+                         JOIN pets p ON f.idPet = p.id
+                         JOIN racas r ON p.id = r.idpet
+                         GROUP BY r.nome
+                         ORDER BY frequencia DESC";
+    $result_racas_frequentes = $conn->query($sql_racas_frequentes);
+
+    // Consulta para serviços mais solicitados
+    $sql_servicos_solicitados = "SELECT s.descricao AS servico, COUNT(f.id) AS frequencia
+                             FROM frequencia f
+                             JOIN servico s ON f.idServico = s.id
+                             GROUP BY s.descricao
                              ORDER BY frequencia DESC";
-    $stmt_racas_frequentes = $dbh->query($sql_racas_frequentes);
+    $result_servicos_solicitados = $conn->query($sql_servicos_solicitados);
 
+    // Consulta para visitas por dono
+    $sql_visitas_dono = "SELECT d.nome AS dono, COUNT(f.id) AS visitas, p.nome AS nomePet, d.telefone AS contatoTutor, 
+                     s.descricao AS servicospet, f.observacao, f.dataVisita
+                     FROM frequencia f
+                     JOIN pets p ON f.idPet = p.id
+                     JOIN donos d ON p.idDono = d.id
+                     JOIN servico s ON f.idServico = s.id
+                     GROUP BY d.nome, p.nome, d.telefone, s.descricao, f.observacao, f.dataVisita
+                     ORDER BY visitas DESC";
+    $result_visitas_dono = $conn->query($sql_visitas_dono);
 
-    $sql_servicos_solicitados = "SELECT s.descricao AS servico, COUNT(v.id) AS frequencia
-                                 FROM visitaspet v
-                                 JOIN servicos s ON v.servico_id = s.id
-                                 GROUP BY s.descricao
-                                 ORDER BY frequencia DESC";
-    $stmt_servicos_solicitados = $dbh->query($sql_servicos_solicitados);
+    // Consulta para o pet mais frequente
+    $sql_pet_mais_frequente = "SELECT p.nome AS pet, COUNT(f.id) AS visitas
+                           FROM frequencia f
+                           JOIN pets p ON f.idPet = p.id
+                           GROUP BY p.nome
+                           ORDER BY visitas DESC
+                           LIMIT 1";
+    $result_pet_mais_frequente = $conn->query($sql_pet_mais_frequente);
+    $row_pet_mais_frequente = $result_pet_mais_frequente->fetch_assoc();
 
+    // Consulta para o dono mais frequente
+    $sql_dono_mais_frequente = "SELECT d.nome AS dono, COUNT(f.id) AS visitas
+                            FROM frequencia f
+                            JOIN pets p ON f.idPet = p.id
+                            JOIN donos d ON p.idDono = d.id
+                            GROUP BY d.nome
+                            ORDER BY visitas DESC
+                            LIMIT 1";
+    $result_dono_mais_frequente = $conn->query($sql_dono_mais_frequente);
+    $row_dono_mais_frequente = $result_dono_mais_frequente->fetch_assoc();
 
-    $sql_visitas_dono = "SELECT d.nome AS dono, COUNT(v.id) AS visitas, p.nome AS nomePet, d.contato AS contatoTutor, 
-                         s.descricao AS servicospet, s.observacoes, v.dataVisita
-                         FROM visitaspet v
-                         JOIN pets p ON v.pet_id = p.id
-                         JOIN donos d ON p.dono_id = d.id
-                         JOIN servicos s ON v.servico_id = s.id
-                         GROUP BY d.nome, p.nome, d.contato, s.descricao, s.observacoes, v.dataVisita
-                         ORDER BY visitas DESC";
-    $stmt_visitas_dono = $dbh->query($sql_visitas_dono);
-
-
-    $sql_pet_mais_frequente = "SELECT p.nome AS pet, COUNT(v.id) AS visitas
-                               FROM visitaspet v
-                               JOIN pets p ON v.pet_id = p.id
-                               GROUP BY p.nome
-                               ORDER BY visitas DESC
-                               LIMIT 1";
-    $stmt_pet_mais_frequente = $dbh->query($sql_pet_mais_frequente);
-    $row_pet_mais_frequente = $stmt_pet_mais_frequente->fetch(PDO::FETCH_ASSOC);
-
-
-    $sql_dono_mais_frequente = "SELECT d.nome AS dono, COUNT(v.id) AS visitas
-                                FROM visitaspet v
-                                JOIN pets p ON v.pet_id = p.id
-                                JOIN donos d ON p.dono_id = d.id
-                                GROUP BY d.nome
-                                ORDER BY visitas DESC
-                                LIMIT 1";
-    $stmt_dono_mais_frequente = $dbh->query($sql_dono_mais_frequente);
-    $row_dono_mais_frequente = $stmt_dono_mais_frequente->fetch(PDO::FETCH_ASSOC);
-
-
-    if (!$stmt_select || !$stmt_racas_frequentes || !$stmt_servicos_solicitados || !$stmt_visitas_dono || !$stmt_pet_mais_frequente || !$stmt_dono_mais_frequente) {
-        die('Erro na consulta SQL: ' . $dbh->errorInfo()[2]);
+    // Verifica erros nas consultas que utilizam `query`
+    if (!$result_racas_frequentes || !$result_servicos_solicitados || !$result_visitas_dono || !$result_pet_mais_frequente || !$result_dono_mais_frequente) {
+        die('Erro nas consultas SQL: ' . $conn->error);
     }
     ?>
+
+
 
     <div class="container">
         <div class="row justify-content-between align-items-baseline mb-4">
@@ -142,8 +168,23 @@
                                 <div class="card-body text-center">
                                     <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
                                     <h5 class="card-title mt-2">Dono Mais Frequente</h5>
-                                    <p class="card-text"><strong>Dono:</strong> <?= htmlspecialchars($row_dono_mais_frequente['dono']) ?></p>
-                                    <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_dono_mais_frequente['visitas']) ?></p>
+                                    <p class="card-text"><strong>Dono:</strong>
+                                        <? if ($row_dono_mais_frequente) {
+                                            echo 'Dono: ' . $row_dono_mais_frequente['dono'];
+                                        } else {
+                                            echo 'Dono: Nenhum dado encontrado';
+                                        }
+                                        ?>
+                                    </p>
+                                    <p class="card-text"><strong>Visitas:</strong>
+                                        <? if ($row_dono_mais_frequente) {
+
+                                            echo 'Visitas: ' . $row_dono_mais_frequente['visitas'];
+                                        } else {
+                                            echo 'Visitas: Nenhum dado encontrado';
+                                        }
+                                        ?>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -152,27 +193,70 @@
                                 <div class="card-body text-center">
                                     <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
                                     <h5 class="card-title mt-2">Pet Mais Frequente</h5>
-                                    <p class="card-text"><strong>Pet:</strong> <?= htmlspecialchars($row_pet_mais_frequente['pet']) ?></p>
-                                    <p class="card-text"><strong>Visitas:</strong> <?= htmlspecialchars($row_pet_mais_frequente['visitas']) ?></p>
+                                    <p class="card-text"><strong>Pet:</strong>
+                                        <? if ($row_pet_mais_frequente) {
+
+                                            echo 'pets: ' . $row_pet_mais_frequente['pets'];
+                                        } else {
+                                            echo 'pets: Nenhum dado encontrado';
+                                        } ?>
+                                    </p>
+                                    <p class="card-text"><strong>Visitas:</strong>
+                                        <? if ($row_pet_mais_frequente) {
+
+                                            echo 'visitas: ' . $row_pet_mais_frequente['visitas'];
+                                        } else {
+                                            echo 'visitas: Nenhum dado encontrado';
+                                        } ?>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         <h5 class="text-ciano-agiliza" style="margin-top:2em"><i class="fa-solid fa-chart-line"></i> Frequência de atendimentos!</h5>
-                        <span class="text-muted">atendimentos mais solicitados</span>
+                        <span class="text-muted">Atendimentos mais solicitados</span>
 
-                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em; margin-top:2em" role="progressbar" aria-label="Animated Success striped example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 25%">tosa</div>
-                        </div>
-                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Info striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 50%">banho e tosa</div>
-                        </div>
-                        <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Warning striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 75%">banho</div>
-                        </div>
-                        <!-- <div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em" role="progressbar" aria-label="Animated Danger striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: 100%">banho</div>
-                        </div> -->
+                        <?php
+                        // Total de serviços solicitados para calcular as porcentagens
+                        $total_servicos_solicitados = 0;
+                        while ($row = $result_servicos_solicitados->fetch_assoc()) {
+                            $total_servicos_solicitados += $row['frequencia'];
+                        }
+
+                        // Exibe as barras de progresso com base nos dados
+                        $result_servicos_solicitados->data_seek(0); // Resetar o cursor para a primeira linha
+
+                        while ($row = $result_servicos_solicitados->fetch_assoc()) {
+                            $servico = $row['servico'];
+                            $frequencia = $row['frequencia'];
+
+                            // Calcula a porcentagem da frequência em relação ao total
+                            $porcentagem = ($total_servicos_solicitados > 0) ? ($frequencia / $total_servicos_solicitados) * 100 : 0;
+
+                            // Escolhe a cor da barra dependendo do serviço
+                            $bar_color = '';
+                            switch (strtolower($servico)) {
+                                case 'banho':
+                                    $bar_color = 'bg-warning';
+                                    break;
+                                case 'tosa':
+                                    $bar_color = 'bg-success';
+                                    break;
+                                case 'banho e tosa':
+                                    $bar_color = 'bg-info';
+                                    break;
+                                default:
+                                    $bar_color = 'bg-secondary'; 
+                                    break;
+                            }
+
+                            // Exibe a barra de progresso
+                            echo '<div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em; margin-top:2em" role="progressbar" aria-valuenow="' . $porcentagem . '" aria-valuemin="0" aria-valuemax="100">';
+                            echo '<div class="progress-bar progress-bar-striped progress-bar-animated ' . $bar_color . '" style="width: ' . $porcentagem . '%">' . $servico . '</div>';
+                            echo '</div>';
+                        }
+                        ?>
+
                     </div>
                 </div>
             </div>
@@ -234,5 +318,10 @@
     include_once 'php/footer_index.php';
     ?>
 </body>
+<?php
+} else {
+    header("location: login.php");
+    exit();
+}
 
-</html>
+?>

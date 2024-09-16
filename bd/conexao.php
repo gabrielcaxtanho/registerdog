@@ -3,7 +3,7 @@ $serverName = "localhost:3307";
 $dbUsername = "root";
 $dbPassword = "";
 $dbName = "registros";
- 
+
 
 $conn = mysqli_connect($serverName, $dbUsername, $dbPassword, $dbName);
 // $mysqli = new mysqli($serverName, $dbUsername, $dbPassword, $dbName) or die(mysqli_error($mysqli));

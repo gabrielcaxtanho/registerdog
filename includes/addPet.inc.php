@@ -15,7 +15,7 @@ if (isset($_POST["submit"])) {
     $observacao = addslashes($_POST['observacao'] ?? '');
 
     require_once '../bd/conexao.php';
-    require_once 'functions.php';
+    require_once 'functions.inc.php';
 
     $conn->begin_transaction();
 

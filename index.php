@@ -1,9 +1,3 @@
-<?php
-
-if (isset($_SESSION["userEmail"])) {
-    require_once("includes/functions.inc.php");
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -51,8 +45,12 @@ if (isset($_SESSION["userEmail"])) {
                 background-position: 100% 0;
             }
         }
-    </style>
 
+        #chartPie {
+            max-width: 10%;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -65,13 +63,13 @@ if (isset($_SESSION["userEmail"])) {
 
     // Consulta para buscar os dados do pet
     $sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, d.telefone AS contatoTutor, 
-               s.descricao AS servicospet, f.observacao, f.dataVisita 
-               FROM pets p 
-               LEFT JOIN racas r ON p.id = r.idpet 
-               LEFT JOIN donos d ON p.idDono = d.id 
-               LEFT JOIN frequencia f ON p.id = f.idPet 
-               LEFT JOIN servico s ON f.idServico = s.id 
-               WHERE p.nome LIKE ?";
+           s.descricao AS servicospet, f.observacao, f.dataVisita 
+           FROM pets p 
+           LEFT JOIN racas r ON p.id = r.idpet 
+           LEFT JOIN donos d ON p.idDono = d.id 
+           LEFT JOIN frequencia f ON p.id = f.idPet 
+           LEFT JOIN servico s ON f.idServico = s.id 
+           WHERE p.nome LIKE ?";
 
     // Prepara a consulta
     $stmt_select = $conn->prepare($sql_select);
@@ -95,50 +93,50 @@ if (isset($_SESSION["userEmail"])) {
 
     // Consulta para raças mais frequentes
     $sql_racas_frequentes = "SELECT r.nome AS raca, COUNT(f.id) AS frequencia
-                         FROM frequencia f
-                         JOIN pets p ON f.idPet = p.id
-                         JOIN racas r ON p.id = r.idpet
-                         GROUP BY r.nome
-                         ORDER BY frequencia DESC";
+                     FROM frequencia f
+                     JOIN pets p ON f.idPet = p.id
+                     JOIN racas r ON p.id = r.idpet
+                     GROUP BY r.nome
+                     ORDER BY frequencia DESC";
     $result_racas_frequentes = $conn->query($sql_racas_frequentes);
 
     // Consulta para serviços mais solicitados
     $sql_servicos_solicitados = "SELECT s.descricao AS servico, COUNT(f.id) AS frequencia
-                             FROM frequencia f
-                             JOIN servico s ON f.idServico = s.id
-                             GROUP BY s.descricao
-                             ORDER BY frequencia DESC";
+                         FROM frequencia f
+                         JOIN servico s ON f.idServico = s.id
+                         GROUP BY s.descricao
+                         ORDER BY frequencia DESC";
     $result_servicos_solicitados = $conn->query($sql_servicos_solicitados);
 
     // Consulta para visitas por dono
     $sql_visitas_dono = "SELECT d.nome AS dono, COUNT(f.id) AS visitas, p.nome AS nomePet, d.telefone AS contatoTutor, 
-                     s.descricao AS servicospet, f.observacao, f.dataVisita
-                     FROM frequencia f
-                     JOIN pets p ON f.idPet = p.id
-                     JOIN donos d ON p.idDono = d.id
-                     JOIN servico s ON f.idServico = s.id
-                     GROUP BY d.nome, p.nome, d.telefone, s.descricao, f.observacao, f.dataVisita
-                     ORDER BY visitas DESC";
+                 s.descricao AS servicospet, f.observacao, f.dataVisita
+                 FROM frequencia f
+                 JOIN pets p ON f.idPet = p.id
+                 JOIN donos d ON p.idDono = d.id
+                 JOIN servico s ON f.idServico = s.id
+                 GROUP BY d.nome, p.nome, d.telefone, s.descricao, f.observacao, f.dataVisita
+                 ORDER BY visitas DESC";
     $result_visitas_dono = $conn->query($sql_visitas_dono);
 
     // Consulta para o pet mais frequente
     $sql_pet_mais_frequente = "SELECT p.nome AS pet, COUNT(f.id) AS visitas
-                           FROM frequencia f
-                           JOIN pets p ON f.idPet = p.id
-                           GROUP BY p.nome
-                           ORDER BY visitas DESC
-                           LIMIT 1";
+                       FROM frequencia f
+                       JOIN pets p ON f.idPet = p.id
+                       GROUP BY p.nome
+                       ORDER BY visitas DESC
+                       LIMIT 1";
     $result_pet_mais_frequente = $conn->query($sql_pet_mais_frequente);
     $row_pet_mais_frequente = $result_pet_mais_frequente->fetch_assoc();
 
     // Consulta para o dono mais frequente
     $sql_dono_mais_frequente = "SELECT d.nome AS dono, COUNT(f.id) AS visitas
-                            FROM frequencia f
-                            JOIN pets p ON f.idPet = p.id
-                            JOIN donos d ON p.idDono = d.id
-                            GROUP BY d.nome
-                            ORDER BY visitas DESC
-                            LIMIT 1";
+                        FROM frequencia f
+                        JOIN pets p ON f.idPet = p.id
+                        JOIN donos d ON p.idDono = d.id
+                        GROUP BY d.nome
+                        ORDER BY visitas DESC
+                        LIMIT 1";
     $result_dono_mais_frequente = $conn->query($sql_dono_mais_frequente);
     $row_dono_mais_frequente = $result_dono_mais_frequente->fetch_assoc();
 
@@ -146,182 +144,167 @@ if (isset($_SESSION["userEmail"])) {
     if (!$result_racas_frequentes || !$result_servicos_solicitados || !$result_visitas_dono || !$result_pet_mais_frequente || !$result_dono_mais_frequente) {
         die('Erro nas consultas SQL: ' . $conn->error);
     }
+
+    // Gera cores aleatórias para o gráfico
+    function gerarCoresAleatorias($quantidade) {
+        $cores = [];
+        for ($i = 0; $i < $quantidade; $i++) {
+            $cores[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+        }
+        return $cores;
+    }
     ?>
 
-
-
-    <div class="container">
-        <div class="row justify-content-between align-items-baseline mb-4">
-            <div class="col" style="margin-left: 2%;">
+    <div class="container-fluid" style="margin-bottom: 5em;">
+        <!-- <div class="row justify-content-between align-items-baseline mb-4"> -->
+            <div class="col" style="display: flex; margin-left: 2%; justify-content: space-evenly; align-items: center; margin-top: 2em;">
                 <!-- Linha separadora para o título -->
                 <hr class="border-white">
 
                 <!-- Card principal -->
-                <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
-                    <h5 class="text-ciano-agiliza"><i class="fa-solid fa-ranking-star"></i> Ranking dos mais frequentes</h5>
-                    <span class="text-muted">pet e dono</span>
+                <div class="container-sm">
+                    <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
+                        <h5 class="text-ciano-agiliza"><i class="fa-solid fa-ranking-star"></i> Ranking dos mais frequentes</h5>
+                        <span class="text-muted">pet e dono</span>
 
-                    <!-- Seção de estatísticas com cartões -->
-                    <div class="row my-4">
-                        <div class="col-md-6">
-                            <div class="card mb-3 border-primary shadow-sm">
-                                <div class="card-body text-center">
-                                    <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
-                                    <h5 class="card-title mt-2">Dono Mais Frequente</h5>
-                                    <p class="card-text"><strong>Dono:</strong>
-                                        <? if ($row_dono_mais_frequente) {
-                                            echo 'Dono: ' . $row_dono_mais_frequente['dono'];
-                                        } else {
-                                            echo 'Dono: Nenhum dado encontrado';
-                                        }
-                                        ?>
-                                    </p>
-                                    <p class="card-text"><strong>Visitas:</strong>
-                                        <? if ($row_dono_mais_frequente) {
-
-                                            echo 'Visitas: ' . $row_dono_mais_frequente['visitas'];
-                                        } else {
-                                            echo 'Visitas: Nenhum dado encontrado';
-                                        }
-                                        ?>
-                                    </p>
+                        <!-- Seção de estatísticas com cartões -->
+                        <div class="row my-4">
+                            <div class="col-md-6">
+                                <div class="card mb-3 border-primary shadow-sm">
+                                    <div class="card-body text-center">
+                                        <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
+                                        <h5 class="card-title mt-2">Dono Mais Frequente</h5>
+                                        <p class="card-text"><strong>Dono:</strong>
+                                            <?php
+                                            if ($row_dono_mais_frequente) {
+                                                echo $row_dono_mais_frequente['dono'];
+                                            } else {
+                                                echo 'Nenhum dado encontrado';
+                                            }
+                                            ?>
+                                        </p>
+                                        <p class="card-text"><strong>Visitas:</strong>
+                                            <?php
+                                            if ($row_dono_mais_frequente) {
+                                                echo $row_dono_mais_frequente['visitas'];
+                                            } else {
+                                                echo 'Nenhum dado encontrado';
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3 border-primary shadow-sm">
+                                    <div class="card-body text-center">
+                                        <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
+                                        <h5 class="card-title mt-2">Pet Mais Frequente</h5>
+                                        <p class="card-text"><strong>Pet:</strong>
+                                            <?php
+                                            if ($row_pet_mais_frequente) {
+                                                echo $row_pet_mais_frequente['pet'];
+                                            } else {
+                                                echo 'Nenhum dado encontrado';
+                                            }
+                                            ?>
+                                        </p>
+                                        <p class="card-text"><strong>Visitas:</strong>
+                                            <?php
+                                            if ($row_pet_mais_frequente) {
+                                                echo $row_pet_mais_frequente['visitas'];
+                                            } else {
+                                                echo 'Nenhum dado encontrado';
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card mb-3 border-primary shadow-sm">
-                                <div class="card-body text-center">
-                                    <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
-                                    <h5 class="card-title mt-2">Pet Mais Frequente</h5>
-                                    <p class="card-text"><strong>Pet:</strong>
-                                        <? if ($row_pet_mais_frequente) {
 
-                                            echo 'pets: ' . $row_pet_mais_frequente['pets'];
-                                        } else {
-                                            echo 'pets: Nenhum dado encontrado';
-                                        } ?>
-                                    </p>
-                                    <p class="card-text"><strong>Visitas:</strong>
-                                        <? if ($row_pet_mais_frequente) {
+                        <!-- Gráficos -->
+                        <h5 class="text-ciano-agiliza">Estatísticas</h5>
 
-                                            echo 'visitas: ' . $row_pet_mais_frequente['visitas'];
-                                        } else {
-                                            echo 'visitas: Nenhum dado encontrado';
-                                        } ?>
-                                    </p>
-                                </div>
+                        <!-- Gráfico de pizza para raças mais frequentes -->
+                        <div class="card mb-3">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Raças Mais Frequentes</h5>
+                                <canvas id="chartPie"></canvas>
                             </div>
                         </div>
 
-                        <h5 class="text-ciano-agiliza" style="margin-top:2em"><i class="fa-solid fa-chart-line"></i> Frequência de atendimentos!</h5>
-                        <span class="text-muted">Atendimentos mais solicitados</span>
-
-                        <?php
-                        // Total de serviços solicitados para calcular as porcentagens
-                        $total_servicos_solicitados = 0;
-                        while ($row = $result_servicos_solicitados->fetch_assoc()) {
-                            $total_servicos_solicitados += $row['frequencia'];
-                        }
-
-                        // Exibe as barras de progresso com base nos dados
-                        $result_servicos_solicitados->data_seek(0); // Resetar o cursor para a primeira linha
-
-                        while ($row = $result_servicos_solicitados->fetch_assoc()) {
-                            $servico = $row['servico'];
-                            $frequencia = $row['frequencia'];
-
-                            // Calcula a porcentagem da frequência em relação ao total
-                            $porcentagem = ($total_servicos_solicitados > 0) ? ($frequencia / $total_servicos_solicitados) * 100 : 0;
-
-                            // Escolhe a cor da barra dependendo do serviço
-                            $bar_color = '';
-                            switch (strtolower($servico)) {
-                                case 'banho':
-                                    $bar_color = 'bg-warning';
-                                    break;
-                                case 'tosa':
-                                    $bar_color = 'bg-success';
-                                    break;
-                                case 'banho e tosa':
-                                    $bar_color = 'bg-info';
-                                    break;
-                                default:
-                                    $bar_color = 'bg-secondary'; 
-                                    break;
-                            }
-
-                            // Exibe a barra de progresso
-                            echo '<div class="progress" style="height: 5%; font-size: 1.1em; margin-bottom:0.1em; margin-top:2em" role="progressbar" aria-valuenow="' . $porcentagem . '" aria-valuemin="0" aria-valuemax="100">';
-                            echo '<div class="progress-bar progress-bar-striped progress-bar-animated ' . $bar_color . '" style="width: ' . $porcentagem . '%">' . $servico . '</div>';
-                            echo '</div>';
-                        }
-                        ?>
-
+                        <!-- Gráfico de pizza para serviços mais solicitados -->
+                        <div class="card mb-3">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Serviços Mais Solicitados</h5>
+                                <canvas id="chartPieServico"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-
-    <style>
-        .image-link {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            max-width: 250px;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Função para gerar cores aleatórias
+        function gerarCoresAleatorias(quantidade) {
+            const cores = [];
+            for (let i = 0; i < quantidade; i++) {
+                cores.push('#' + Math.floor(Math.random() * 16777215).toString(16));
+            }
+            return cores;
         }
 
-        .image-link:hover {
-            transform: scale(1.05);
-        }
+        // Gráfico de pizza para raças mais frequentes
+        const ctxPie = document.getElementById('chartPie').getContext('2d');
+        const dataRacas = {
+            labels: <?php
+                $racas = [];
+                while ($row = $result_racas_frequentes->fetch_assoc()) {
+                    $racas[] = $row;
+                }
+                echo json_encode(array_column($racas, 'raca'));
+                ?>,
+            datasets: [{
+                label: 'Raças Mais Frequentes',
+                data: <?php echo json_encode(array_column($racas, 'frequencia')); ?>,
+                backgroundColor: gerarCoresAleatorias(<?php echo count($racas); ?>),
+                borderColor: 'rgba(255, 255, 255, 1)',
+                borderWidth: 1
+            }]
+        };
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: dataRacas
+        });
 
-        .image {
-            width: 90%;
-            height: auto;
-            border-radius: 15px;
-            display: block;
-            transition: opacity 0.3s ease;
-        }
+        // Gráfico de pizza para serviços mais solicitados
+        const ctxPieServico = document.getElementById('chartPieServico').getContext('2d');
+        const dataServicos = {
+            labels: <?php
+                $servicos = [];
+                while ($row = $result_servicos_solicitados->fetch_assoc()) {
+                    $servicos[] = $row;
+                }
+                echo json_encode(array_column($servicos, 'servico'));
+                ?>,
+            datasets: [{
+                label: 'Serviços Mais Solicitados',
+                data: <?php echo json_encode(array_column($servicos, 'frequencia')); ?>,
+                backgroundColor: gerarCoresAleatorias(<?php echo count($servicos); ?>),
+                borderColor: 'rgba(255, 255, 255, 1)',
+                borderWidth: 1
+            }]
+        };
+        new Chart(ctxPieServico, {
+            type: 'pie',
+            data: dataServicos
+        });
+    </script>
 
-        .image-link:hover .image {
-            opacity: 0.3;
-        }
-
-        .overlay-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .image-link:hover .overlay-text {
-            opacity: 1;
-        }
-    </style>
-
-
-    <script src="https://kit.fontawesome.com/5fe78ee910.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qLL9TLZS4MuW34xtMy0fQpQkCPMRC33Xji0KSm8UGcx2f2uOaayDquNk8eQ1A5ai" crossorigin="anonymous"></script>
-
-    <?php
-    include_once 'php/footer_index.php';
-    ?>
 </body>
-<?php
-} else {
-    header("location: login.php");
-    exit();
-}
 
-?>
+</html>

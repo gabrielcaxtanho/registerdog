@@ -1,9 +1,12 @@
 <?php
-session_start(); 
+session_start();
+if (isset($_SESSION["userEmail"])) {
+    require_once(__DIR__ . "/includes/functions.inc.php");
 
-$mensagem = $_SESSION['mensagem'] ?? null;
-unset($_SESSION['mensagem']);
+    $mensagem = $_SESSION['mensagem'] ?? null;
+    unset($_SESSION['mensagem']);
 ?>
+
 
     <!DOCTYPE html>
     <html lang="pt-BR">
@@ -27,7 +30,7 @@ unset($_SESSION['mensagem']);
                     <hr class="border-white">
                     <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
                         <form id="includes/addPet.ini.php" method="post" action="includes/addPet.ini.php">
-                             <!-- Corrigido para o arquivo correto -->
+                            <!-- Corrigido para o arquivo correto -->
                             <div class="mb-3">
                                 <label for="raca" class="form-label"><strong>Nome e Sobrenome</strong><b style="color: #ff0000;">*</b></label>
                                 <input class="form-control" type="text" id="raca" name="raca" required>
@@ -79,3 +82,9 @@ unset($_SESSION['mensagem']);
     </body>
 
     </html>
+<?php
+} else {
+    header("location: login.php");
+    exit();
+}
+?>

@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (isset($_SESSION["userEmail"])) {
+    require_once(__DIR__ . "/includes/functions.inc.php");
+    
 
 $mensagem = $_SESSION['mensagem'] ?? null;
 unset($_SESSION['mensagem']);
@@ -148,3 +151,9 @@ unset($_SESSION['mensagem']);
 </body>
 
 </html>
+<?php
+} else {
+    header("location: login.php");
+    exit();
+}
+?>

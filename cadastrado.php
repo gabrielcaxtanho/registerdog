@@ -1,3 +1,11 @@
+
+<?php
+session_start();
+if (isset($_SESSION["userEmail"])) {
+    require_once(__DIR__ . "/includes/functions.inc.php");
+    
+?>
+
 <?php
 
 require './bd/conexao.php';
@@ -211,3 +219,9 @@ if (!empty($nomePet)) {
 </body>
 
 </html>
+<?php
+} else {
+    header("location: login.php");
+    exit();
+}
+?>

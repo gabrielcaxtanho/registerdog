@@ -8,7 +8,7 @@ if (isset($_POST["submit"])) {
     $estado = addslashes($_POST["estado"]);
 
     require_once '../bd/conexao.php';
-    require_once 'functions.php';
+    require_once 'functions.inc.php';
 
     $pwd = addslashes($_POST["password"]);
     $pwdrepeat = addslashes($_POST["confirmpassword"]);

@@ -14,13 +14,13 @@ function emptyInputLogin($username, $pwd)
 
 function loginUser($conn, $userEmail, $pwd)
 {
-    session_start(); // Certifique-se de que session_start() é chamado
+    session_start(); 
 
     $uidExists = uidExists($conn, $userEmail, $userEmail);
 
     if ($uidExists === false) {
-        echo "Usuário não encontrado"; // Depuração
-        exit(); // Adicione um exit para parar a execução e ver o echo
+        echo "Usuário não encontrado"; 
+        exit(); 
     }
 
     $pwdHashed = $uidExists["password"];
@@ -43,7 +43,12 @@ function loginUser($conn, $userEmail, $pwd)
         $_SESSION["userEmail"] = $uidExists["userEmail"];
         $_SESSION["userperm"]  = getPermission($uidExists);
 
-        header("location: ../index.php");
+        /* echo "<pre>";
+        var_dump($_SESSION);
+        echo "</pre>"; */
+
+        echo "Login bem-sucedido"; 
+        header("Location: ../index.php"); 
         exit();
     }
 }
@@ -109,7 +114,7 @@ function uidExists($conn, $userName, $userEmail)
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        echo "Erro na preparação da consulta SQL: " . mysqli_error($conn); // Exiba o erro
+        echo "Erro na preparação da consulta SQL: " . mysqli_error($conn); 
         exit();
     }
 
@@ -121,7 +126,7 @@ function uidExists($conn, $userName, $userEmail)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        echo "Nenhum usuário encontrado com userName: $userName e userEmail: $userEmail"; // Depuração
+        echo "Nenhum usuário encontrado com userName: $userName e userEmail: $userEmail"; 
         header("Location: /registerPet/login.php?error=stmtfailed");
         exit();
     }

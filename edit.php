@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (isset($_SESSION["userEmail"])) {
+    require_once(__DIR__ . "/includes/functions.inc.php");
+    
+?>
+
+<?php
   require __DIR__ . '/./bd/conexao.php';
 
 
@@ -296,3 +303,9 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
 </body>
 
 </html>
+<?php
+} else {
+    header("location: login.php");
+    exit();
+}
+?>

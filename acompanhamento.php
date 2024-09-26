@@ -23,9 +23,9 @@
 </style>
 
 
-<header id="header"></header>
 
 <body>
+<?php include_once 'php/header_index.php'; ?>
 
     <div class="main-content">
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">

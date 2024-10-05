@@ -339,9 +339,28 @@ function agora()
 
     return $thisHour;
 }
-function createPet($conn, $raca, $nome, $idade, $dono, $contato, $observacao, $hoje, $agora) {
-    
-    $sql = "INSERT INTO pets (dono, nome, idade, observacao, idRaca, contato, hora, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+function createDono($conn, $nomeTutor, $contato) {
+    $sql = "INSERT INTO donos (nome, contato) VALUES (?, ?)";
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        echo "Erro na preparação da query: " . mysqli_stmt_error($stmt);
+        return null; // Retorna null se falhar
+    }
+
+    mysqli_stmt_bind_param($stmt, "ss", $nomeTutor, $contato);
+    if (!mysqli_stmt_execute($stmt)) {
+        echo "Erro ao inserir dono: " . mysqli_stmt_error($stmt);
+        return null; // Retorna null se falhar
+    }
+
+    mysqli_stmt_close($stmt);
+    return mysqli_insert_id($conn); // Retorna o ID do dono inserido
+}
+
+function createPet($conn, $raca, $nome, $idade, $donoId, $contato, $observacao, $idResp, $hoje, $agora) {
+    $sql = "INSERT INTO pets (dono, nome, idade, observacao, idRaca, contato, idusers, hora, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -349,18 +368,16 @@ function createPet($conn, $raca, $nome, $idade, $dono, $contato, $observacao, $h
         return;
     }
 
-    mysqli_stmt_bind_param($stmt, "sissssss", $dono, $nome, $idade, $observacao, $raca, $contato, $agora, $hoje);
+    mysqli_stmt_bind_param($stmt, "isssssiss", $donoId, $nome, $idade, $observacao, $idResp, $raca, $contato, $agora, $hoje);
 
     if (!mysqli_stmt_execute($stmt)) {
         echo "Erro ao inserir registro: " . mysqli_stmt_error($stmt);
     } else {
-        echo "Registro inserido com sucesso.";
+        header("Location: ../cadastro.php?success=usercreated");
     }
 
     mysqli_stmt_close($stmt);
 }
-
-
 
 function dd($parametro, $parametro2 = '', $parametro3 = ''): never{
 

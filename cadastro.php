@@ -120,22 +120,6 @@ unset($_SESSION['mensagem']);
                             <input class="form-control" type="text" id="contatoTutor" name="contatoTutor" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><strong>Serviços</strong><b style="color: #ff0000;">*</b></label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="descricao" value="banho" required>
-                                <label class="form-check-label" for="banho">Banho</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="descricao" value="tosa">
-                                <label class="form-check-label" for="tosa">Tosa</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="descricao" value="banho e tosa">
-                                <label class="form-check-label" for="banhoTosa">Banho e Tosa</label>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
                             <label for="observacao" class="form-label"><strong>Observações</strong></label>
                             <input class="form-control" type="text" id="observacao" name="observacao">
                         </div>

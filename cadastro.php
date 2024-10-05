@@ -112,6 +112,10 @@ unset($_SESSION['mensagem']);
                             <input class="form-control" type="text" id="nomeTutor" name="nomeTutor" required>
                         </div>
                         <div class="mb-3">
+                            <label for="idade" class="form-label"><strong>Idade do Pet</strong><b style="color: #ff0000;">*</b></label>
+                            <input class="form-control" type="text" id="idade" name="idade" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="contatoTutor" class="form-label"><strong>Contato</strong><b style="color: #ff0000;">*</b></label>
                             <input class="form-control" type="text" id="contatoTutor" name="contatoTutor" required>
                         </div>

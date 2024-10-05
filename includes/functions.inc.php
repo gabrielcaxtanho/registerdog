@@ -16,7 +16,7 @@ function loginUser($conn, $userEmail, $pwd)
 {
     session_start(); 
 
-    $uidExists = uidExists($conn, $userEmail, $userEmail);
+    $uidExists = uidExists($conn, $userEmail, $pwd);
 
     if ($uidExists === false) {
         echo "Usuário não encontrado"; 
@@ -29,16 +29,16 @@ function loginUser($conn, $userEmail, $pwd)
     $checkPwd = password_verify($pwd, $pwdHashed);
 
     if ($checkPwd === false) {
-        header("Location: /registerPet/login.php?error=wronglogin");
+        header("Location: /registerPet/index.php?error=wronglogin");
         exit();
     } else if ($_SESSION["useraprovacao"] === 'Aguardando') {
-        header("location: ../login.php?error=waitaprov");
+        header("location: ../index.php?error=waitaprov");
         exit();
     } else if ($_SESSION["useraprovacao"] === 'Bloqueado') {
-        header("location: ../login.php?error=bloquser");
+        header("location: ../index.php?error=bloquser");
         exit();
     } else if ($checkPwd === true) {
-        $_SESSION["userid"] = $uidExists["id"];
+        $_SESSION["userid"] = $uidExists["userid"];
         $_SESSION["userName"] = $uidExists["userName"];
         $_SESSION["userEmail"] = $uidExists["userEmail"];
         $_SESSION["userperm"]  = getPermission($uidExists);
@@ -48,12 +48,10 @@ function loginUser($conn, $userEmail, $pwd)
         echo "</pre>"; */
 
         echo "Login bem-sucedido"; 
-        header("Location: ../index.php"); 
+        header("Location: ../dash.php"); 
         exit();
     }
 }
-
-
 
 function getPermission($uidExists)
 {
@@ -97,7 +95,7 @@ function newPassword($conn, $email)
     }
 
     $uid = $uidExists["userName"];
-    $userEmail = $uidExists["usersEmail"];
+    $userEmail = $uidExists["userEmail"];
     $celular = $uidExists["celular"];
     $userName = $uidExists["usersName"];
     $userName = explode(" ", $uidExists["usersName"]);
@@ -108,9 +106,9 @@ function newPassword($conn, $email)
     editPwdFromRecover($conn, $uid, $hashedPwd, $userEmail, $nome, $pwd, $celular); */
 }
 
-function uidExists($conn, $userName, $userEmail)
+function uidExists($conn, $userEmail , $userName)
 {
-    $sql = "SELECT * FROM users WHERE userName = ? OR userEmail = ?;";
+    $sql = "SELECT * FROM users WHERE userEmail = ? OR userName = ?;";
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -118,7 +116,7 @@ function uidExists($conn, $userName, $userEmail)
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt, "ss", $userName, $userEmail);
+    mysqli_stmt_bind_param($stmt, "ss", $userEmail, $userName);
     mysqli_stmt_execute($stmt);
 
     $resultData = mysqli_stmt_get_result($stmt);
@@ -126,62 +124,67 @@ function uidExists($conn, $userName, $userEmail)
     if ($row = mysqli_fetch_assoc($resultData)) {
         return $row;
     } else {
-        echo "Nenhum usuário encontrado com userName: $userName e userEmail: $userEmail"; 
-        header("Location: /registerPet/login.php?error=stmtfailed");
+        header("Location: /registerPet/index.php?error=stmtfailed");
         exit();
     }
 }
 
-function createUser($conn, $userEmail, $petshop, $username, $celular, $cidade, $estado, $pwd, $pwdrepeat, $aprov, $perm)
-{
+function createUser($conn, $userName, $petshop, $userEmail, $celular, $cidade, $estado, $pwd, $pwdrepeat, $aprov, $perm) {
+    // Verificar se as senhas são iguais
+    /* if ($pwd !== $pwdrepeat) {
+        header("Location: ../cadastroUser.php?error=passwordmismatch");
+        exit();
+    } */
+
     $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 
-    $sql_check = "SELECT * FROM users WHERE userName = ? OR celular = ?";
+    // Verificar se o usuário já existe
+    $sql_check = "SELECT * FROM users WHERE userEmail = ? OR celular = ?";
     $stmt_check = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt_check, $sql_check)) {
-        header("Location: ../cadastro?error=stmtfailed");
+        header("Location: ../cadastroUser.php?error=stmtfailed");
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt_check, "ss", $username, $celular);
+    mysqli_stmt_bind_param($stmt_check, "ss", $userEmail, $celular);
     mysqli_stmt_execute($stmt_check);
     $resultData = mysqli_stmt_get_result($stmt_check);
+    $resultCheck = mysqli_fetch_assoc($resultData);
 
-    if (mysqli_fetch_assoc($resultData)) {
-        header("Location: .././cadastroUser.php?error=userorexists");
+    if ($resultCheck) {
+        header("Location: ../cadastroUser.php?error=userorexists");
         exit();
     }
 
     mysqli_stmt_close($stmt_check);
 
+    // Inserção de dados no banco
     $sql = "INSERT INTO users (userName, nomePetShop, celular, cidade, estado, password, dataInicio, usersAprov, userEmail, userperm) 
             VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)";
 
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        // Mensagem de depuração
         echo "Erro na preparação do SQL: " . mysqli_error($conn);
-        header("Location: .././cadastroUser.php?error=stmtfailed");
         exit();
     }
 
-    mysqli_stmt_bind_param($stmt, "sssssssss", $username,  $petshop, $celular, $cidade, $estado, $hashedPwd, $aprov, $userEmail, $perm);
+    // Correção na ordem dos parâmetros
+    mysqli_stmt_bind_param($stmt, "sssssssss", $userName, $petshop, $celular, $cidade, $estado, $hashedPwd, $aprov, $userEmail, $perm);
 
     if (!mysqli_stmt_execute($stmt)) {
         echo "Erro na execução do SQL: " . mysqli_error($conn);
-        header("Location: .././cadastroUser.php?error=executionfailed");
+        exit();
     } else {
-        header("Location: .././cadastroUser.php?success=usercreated");
+        header("Location: ../cadastroUser.php?success=usercreated");
     }
 
     mysqli_stmt_close($stmt);
     exit();
 }
 
-
 function editUser($conn, $nome, $uf, $email, $uid, $celular, $identificador, $aprov, $perm, $dep, $usersid)
 {
-    $sql = "UPDATE users SET usersName='$nome', usersUf='$uf', usersEmail='$email', usersUid='$uid', usersCel='$celular', usersIdentificador='$identificador', usersAprov='$aprov', usersPerm='$perm', usersDepartamento='$dep' WHERE usersId='$usersid'";
+    $sql = "UPDATE users SET usersName='$nome', usersUf='$uf', userEmail='$email', usersUid='$uid', usersCel='$celular', usersIdentificador='$identificador', usersAprov='$aprov', usersPerm='$perm', usersDepartamento='$dep' WHERE usersId='$usersid'";
 
 
     if (mysqli_query($conn, $sql)) {
@@ -308,121 +311,63 @@ function pwdMatch($pwd, $pwdrepeat)
     return $result;
 }
 
-function createPet($conn, $nome_tutor, $contato_tutor, $raca, $nome_pet, $descricao_servico, $observacao)
+function hoje()
 {
-    // Inicia a transação
-    $conn->begin_transaction();
+    date_default_timezone_set('UTC');
+    $dtz = new DateTimeZone("America/Sao_Paulo");
+    $dt = new DateTime("now", $dtz);
+    $hoje = $dt->format("Y-m-d");
+    // $horaAtual = $dt->format("H:i:s");
 
-    try {
-        // Debug: Mostra valores recebidos
-        error_log(print_r([$nome_tutor, $contato_tutor, $raca, $nome_pet, $descricao_servico, $observacao], true));
+    // $thisMonth = date('m');
+    // $thisYear = date('Y');
+    // $thisDay = date('d');
+    // $hoje = $thisYear . "-" . $thisMonth . "-" . $thisDay;
 
-        // Verifica se o dono já existe
-        $stmt = $conn->prepare("SELECT id FROM donos WHERE telefone = ?");
-        if ($stmt === false) {
-            throw new Exception("Erro na preparação da consulta: " . $conn->error);
-        }
-        $stmt->bind_param("s", $contato_tutor);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+    return $hoje;
+}
 
-        if ($row) {
-            $dono_id = $row['id'];
-        } else {
-            $data = date('Y-m-d');
+function agora()
+{
 
-            // Insere o dono com a data
-            $stmt = $conn->prepare("INSERT INTO donos (nome, telefone, data) VALUES (?, ?, ?)");
-            if ($stmt === false) {
-                throw new Exception("Erro na preparação da consulta: " . $conn->error);
-            }
+    date_default_timezone_set('UTC');
+    $dtz = new DateTimeZone("America/Sao_Paulo");
+    $dt = new DateTime("now", $dtz);
+    // $hoje = $dt->format("Y-m-d");
+    $thisHour = $dt->format("H:i:s");
+    // $thisHour = date("H:i:s");
 
-            // Adicione "s" para o terceiro parâmetro, que é a data
-            $stmt->bind_param("sss", $nome_tutor, $contato_tutor, $data);
-            $stmt->execute();
-            $dono_id = $conn->insert_id;
-        }
+    return $thisHour;
+}
+function createPet($conn, $raca, $nome, $idade, $dono, $contato, $observacao, $hoje, $agora) {
+    
+    $sql = "INSERT INTO pets (dono, nome, idade, observacao, idRaca, contato, hora, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_stmt_init($conn);
 
-
-        // Verifica se a raça já existe
-        $stmt = $conn->prepare("SELECT id FROM racas WHERE nome = ?");
-        if ($stmt === false) {
-            throw new Exception("Erro na preparação da consulta: " . $conn->error);
-        }
-        $stmt->bind_param("s", $raca);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-
-        if ($row) {
-            $raca_id = $row['id'];
-        } else {
-            // Insere a raça
-            $stmt = $conn->prepare("INSERT INTO racas (nome) VALUES (?)");
-            if ($stmt === false) {
-                throw new Exception("Erro na preparação da consulta: " . $conn->error);
-            }
-            $stmt->bind_param("s", $raca);
-            $stmt->execute();
-            $raca_id = $conn->insert_id;
-        }
-
-        // Insere o pet com a data atual
-        $stmt = $conn->prepare("INSERT INTO pets (nome, idDono, idRaca, descricao) VALUES (?, ?, ?, ?, ?)");
-        if ($stmt === false) {
-            throw new Exception("Erro na preparação da consulta: " . $conn->error);
-        }
-        $stmt->bind_param("siss", $nome_pet, $dono_id, $raca_id);
-        $stmt->execute();
-        $pet_id = $conn->insert_id;
-
-        // Verifica se o serviço já existe
-        $stmt = $conn->prepare("SELECT id FROM servico WHERE descricao = ?");
-        if ($stmt === false) {
-            throw new Exception("Erro na preparação da consulta: " . $conn->error);
-        }
-        $stmt->bind_param("s", $descricao_servico);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-
-        if ($row) {
-            $servico_id = $row['id'];
-        } else {
-            // Insere o serviço se não existir
-            $stmt = $conn->prepare("INSERT INTO servico (descricao) VALUES (?)");
-            if ($stmt === false) {
-                throw new Exception("Erro na preparação da consulta: " . $conn->error);
-            }
-            $stmt->bind_param("s", $descricao_servico);
-            $stmt->execute();
-            $servico_id = $conn->insert_id;
-        }
-
-        // Insere a visita/serviço realizado
-        $stmt = $conn->prepare("INSERT INTO frequencia (idCliente, idPet, idServico, dataVisita, observacao) VALUES (?, ?, ?, CURDATE(), ?)");
-        if ($stmt === false) {
-            throw new Exception("Erro na preparação da consulta: " . $conn->error);
-        }
-        $stmt->bind_param("iiis", $dono_id, $pet_id, $servico_id, $observacao);
-        $stmt->execute();
-
-        // Confirma a transação
-        $conn->commit();
-
-        // Redireciona com sucesso
-        header("Location: .././cadastro.php?success=usercreated");
-        exit();
-    } catch (Exception $e) {
-        // Desfaz a transação em caso de erro
-        $conn->rollback();
-        // Redireciona com erro
-        header("Location: .././cadastro.php?error=" . urlencode($e->getMessage()));
-        exit();
-    } finally {
-        if (isset($stmt)) {
-            $stmt->close();
-        }
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        echo "Erro na preparação da query: " . mysqli_stmt_error($stmt);
+        return;
     }
+
+    mysqli_stmt_bind_param($stmt, "sissssss", $dono, $nome, $idade, $observacao, $raca, $contato, $agora, $hoje);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        echo "Erro ao inserir registro: " . mysqli_stmt_error($stmt);
+    } else {
+        echo "Registro inserido com sucesso.";
+    }
+
+    mysqli_stmt_close($stmt);
+}
+
+
+
+function dd($parametro, $parametro2 = '', $parametro3 = ''): never{
+
+    echo '<pre>';
+    print_r($parametro);
+    echo '</pre>';
+    die("<h1 style=\"color: rebeccapurple;\">Voce esta debugando o CÓDIGO <i class=\"bi bi-emoji-sunglasses-fill\"></i>     <i class=\"bi bi-code-slash\"></i>  </h1> <br>
+    <img style=\"width: 150px; margin:100px;\" src=\"assetsnew/img/programador.jpg\" alt=\"\">");
+
 }

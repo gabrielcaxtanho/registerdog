@@ -1,244 +1,191 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
+<!-- <?php include("php/head_login.php"); ?> -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>dashboard</title>
-    <link rel="icon" href="./img/logopets1.png" type="image">
-    <style>
-        /* Estilos para barras de progresso verticais */
-        .progress-vertical {
-            position: relative;
-            width: 30px;
-            /* Largura da barra de progresso */
-            height: 200px;
-            /* Altura da barra de progresso */
-            display: flex;
-            align-items: flex-end;
-            margin-right: 20px;
-            /* Espaçamento entre barras */
-        }
 
-        .progress-bar {
-            width: 100%;
-            /* Largura da barra de progresso */
-            transition: height 0.6s ease;
-            /* Transição suave para altura */
-        }
-
-        .progress-bar-striped {
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-        }
-
-        .progress-bar-animated {
-            animation: progress-bar-stripes 1s linear infinite;
-        }
-
-        @keyframes progress-bar-stripes {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 100% 0;
-            }
-        }
-
-        #chartPie {
-            max-width: 10%;
-            height: auto;
-        }
-    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="./css/style.css">
 </head>
 
+<header id="header"></header>
+<style>
+    #header {
+        background-image: url('./img/img.jpg');
+        /*  background-image: url('https://images.hdqwalls.com/download/windows-11-minimal-white-4k-y6-1920x1080.jpg'); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        color: white;
+        height: 4em;
+    }
+
+    .d-flex-de {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .fa-paw {
+        font-size: 24px;
+        color: #dc3545;
+    }
+
+    .error {
+        background-color: #ffd5d5;
+        color: #cd0505;
+        ;
+        text-align: center;
+        padding: 1em;
+    }
+
+    .success {
+        background-color: #31b7bb;
+        color: white;
+        text-align: center;
+        padding: 1em;
+    }
+</style>
+
 <body>
-    <?php include_once 'php/header_index.php'; ?>
-
     <?php
-    require './bd/conexao.php';
-
-    $nomePet = isset($_GET['nomePet']) ? $_GET['nomePet'] : '';
-
-    // Consulta para buscar os dados do pet
-    $sql_select = "SELECT p.nome AS nomePet, r.nome AS raca, d.nome AS nomeTutor, d.telefone AS contatoTutor, 
-           s.descricao AS servicospet, f.observacao, f.dataVisita 
-           FROM pets p 
-           LEFT JOIN racas r ON p.id = r.idpet 
-           LEFT JOIN donos d ON p.idDono = d.id 
-           LEFT JOIN frequencia f ON p.id = f.idPet 
-           LEFT JOIN servico s ON f.idServico = s.id 
-           WHERE p.nome LIKE ?";
-
-    // Prepara a consulta
-    $stmt_select = $conn->prepare($sql_select);
-
-    if ($stmt_select === false) {
-        // Erro ao preparar a consulta
-        die('Erro ao preparar a consulta SQL: ' . $conn->error);
-    }
-
-    $param = "%$nomePet%";
-    $stmt_select->bind_param("s", $param);
-    $stmt_select->execute();
-    $result_select = $stmt_select->get_result();
-
-    // Verifica se a consulta executou corretamente
-    if (!$result_select) {
-        die('Erro ao executar a consulta SQL: ' . $stmt_select->error);
-    }
-
-    // Outras consultas que não precisam de prepared statements
-
-    // Consulta para raças mais frequentes
-    $sql_racas_frequentes = "SELECT r.nome AS raca, COUNT(f.id) AS frequencia
-                     FROM frequencia f
-                     JOIN pets p ON f.idPet = p.id
-                     JOIN racas r ON p.id = r.idpet
-                     GROUP BY r.nome
-                     ORDER BY frequencia DESC";
-    $result_racas_frequentes = $conn->query($sql_racas_frequentes);
-
-    // Consulta para serviços mais solicitados
-    $sql_servicos_solicitados = "SELECT s.descricao AS servico, COUNT(f.id) AS frequencia
-                         FROM frequencia f
-                         JOIN servico s ON f.idServico = s.id
-                         GROUP BY s.descricao
-                         ORDER BY frequencia DESC";
-    $result_servicos_solicitados = $conn->query($sql_servicos_solicitados);
-
-    // Consulta para visitas por dono
-    $sql_visitas_dono = "SELECT d.nome AS dono, COUNT(f.id) AS visitas, p.nome AS nomePet, d.telefone AS contatoTutor, 
-                 s.descricao AS servicospet, f.observacao, f.dataVisita
-                 FROM frequencia f
-                 JOIN pets p ON f.idPet = p.id
-                 JOIN donos d ON p.idDono = d.id
-                 JOIN servico s ON f.idServico = s.id
-                 GROUP BY d.nome, p.nome, d.telefone, s.descricao, f.observacao, f.dataVisita
-                 ORDER BY visitas DESC";
-    $result_visitas_dono = $conn->query($sql_visitas_dono);
-
-    // Consulta para o pet mais frequente
-    $sql_pet_mais_frequente = "SELECT p.nome AS pet, COUNT(f.id) AS visitas
-                       FROM frequencia f
-                       JOIN pets p ON f.idPet = p.id
-                       GROUP BY p.nome
-                       ORDER BY visitas DESC
-                       LIMIT 1";
-    $result_pet_mais_frequente = $conn->query($sql_pet_mais_frequente);
-    $row_pet_mais_frequente = $result_pet_mais_frequente->fetch_assoc();
-
-    // Consulta para o dono mais frequente
-    $sql_dono_mais_frequente = "SELECT d.nome AS dono, COUNT(f.id) AS visitas
-                        FROM frequencia f
-                        JOIN pets p ON f.idPet = p.id
-                        JOIN donos d ON p.idDono = d.id
-                        GROUP BY d.nome
-                        ORDER BY visitas DESC
-                        LIMIT 1";
-    $result_dono_mais_frequente = $conn->query($sql_dono_mais_frequente);
-    $row_dono_mais_frequente = $result_dono_mais_frequente->fetch_assoc();
-
-    // Verifica erros nas consultas que utilizam `query`
-    if (!$result_racas_frequentes || !$result_servicos_solicitados || !$result_visitas_dono || !$result_pet_mais_frequente || !$result_dono_mais_frequente) {
-        die('Erro nas consultas SQL: ' . $conn->error);
-    }
-
-    // Gera cores aleatórias para o gráfico
-    function gerarCoresAleatorias($quantidade) {
-        $cores = [];
-        for ($i = 0; $i < $quantidade; $i++) {
-            $cores[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-        }
-        return $cores;
-    }
+    include_once './bd/conexao.php';
     ?>
 
-    <div class="container-fluid" style="margin-bottom: 5em;">
-        <!-- <div class="row justify-content-between align-items-baseline mb-4"> -->
-            <div class="col" style="display: flex; margin-left: 2%; justify-content: space-evenly; align-items: center; margin-top: 2em;">
-                <!-- Linha separadora para o título -->
-                <hr class="border-white">
+    <!--    -->
 
-                <!-- Card principal -->
-                <div class="container-sm">
-                    <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
-                        <h5 class="text-ciano-agiliza"><i class="fa-solid fa-ranking-star"></i> Ranking dos mais frequentes</h5>
-                        <span class="text-muted">pet e dono</span>
+    <div class="container-lg">
+        <div class="d-flex" style="display: flex; justify-content: space-evenly; flex-wrap: wrap; margin-top: 6em">
+            <!-- <div class="col-md-4 m-4">
+                <div class="font">
+                    <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
+                    <h4 class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h4>
+                    <img src="./img/logopets.png" alt="Logo Pets" width="50%" style="margin-left: 8em;">
+                </div>
+            </div> -->
+            <div class="col-md-6">
+                 <!-- <div>
+                    <?php
+                    if (isset($_GET['error'])) {
+                        if ($_GET['error'] == "bloquser") {
+                            echo "<p class='error'>Usuário Bloqueado</p>";
+                        } else if ($_GET['error'] == "stmtfailed") {
+                            echo "<p class='error'>Nenhum Usuário encontrado.</p>";
+                        } /* else if ($_GET['error'] == "wronglogin") {
+                            echo "<p class='error'>Senha Incorreta.</p>";
+                        } */
+                    } else if (isset($_GET['success'])) {
+                        if ($_GET['success'] == "usercreated") {
+                            echo "<p class='success'>Usuário criado com sucesso!</p>";
+                        }
+                    }
+                    ?>  
+                </div>  -->
 
-                        <!-- Seção de estatísticas com cartões -->
-                        <div class="row my-4">
-                            <div class="col-md-6">
-                                <div class="card mb-3 border-primary shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
-                                        <h5 class="card-title mt-2">Dono Mais Frequente</h5>
-                                        <p class="card-text"><strong>Dono:</strong>
-                                            <?php
-                                            if ($row_dono_mais_frequente) {
-                                                echo $row_dono_mais_frequente['dono'];
-                                            } else {
-                                                echo 'Nenhum dado encontrado';
-                                            }
-                                            ?>
-                                        </p>
-                                        <p class="card-text"><strong>Visitas:</strong>
-                                            <?php
-                                            if ($row_dono_mais_frequente) {
-                                                echo $row_dono_mais_frequente['visitas'];
-                                            } else {
-                                                echo 'Nenhum dado encontrado';
-                                            }
-                                            ?>
-                                        </p>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
+                            <div class="font">
+                                <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
+                                <h4 class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h4>
+                            </div>
+
+                            <hr class="border-white">
+                            <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
+
+                                <form id="registrationForm" action="includes/login.inc.php" method="POST" class="row g-3 needs-validation" novalidate>
+                                    <div class="form-group">
+                                        <input id="login-input-1" class="form-control" name="uid" type="text" placeholder="E-mail" />
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card mb-3 border-primary shadow-sm">
-                                    <div class="card-body text-center">
-                                        <i class="fa-solid fa-crown text-warning" style="font-size: 2em;"></i>
-                                        <h5 class="card-title mt-2">Pet Mais Frequente</h5>
-                                        <p class="card-text"><strong>Pet:</strong>
-                                            <?php
-                                            if ($row_pet_mais_frequente) {
-                                                echo $row_pet_mais_frequente['pet'];
-                                            } else {
-                                                echo 'Nenhum dado encontrado';
-                                            }
-                                            ?>
-                                        </p>
-                                        <p class="card-text"><strong>Visitas:</strong>
-                                            <?php
-                                            if ($row_pet_mais_frequente) {
-                                                echo $row_pet_mais_frequente['visitas'];
-                                            } else {
-                                                echo 'Nenhum dado encontrado';
-                                            }
-                                            ?>
-                                        </p>
+
+                                    <div class="input-group mb-3">
+                                        <input id="login-input-2" class="form-control" name="pwd" type="password" placeholder="Senha" aria-label="Senha" aria-describedby="show-pass-btn">
+                                        <button class="btn btn-outline-secondary" type="button" id="show-pass-btn" onclick="showPass()">
+                                            <i class="far fa-eye"></i>
+                                        </button>
                                     </div>
+                                    <div class="card-footer bg-transparent text-end">
+                                        <button class="btn btn-primary" type='submit' name='submit' id='submit'>login</button>
+                                    </div>
+                                </form>
+
+                                <script>
+                                    $('#login-input-2').keyup(function(e) {
+                                        if (e.keyCode == 13) {
+                                            $('#login').click();
+                                        }
+                                    });
+                                </script>
+                                <?php
+                                if (isset($_GET["error"])) {
+                                    if ($_GET["error"] == "emptyinput") {
+                                        echo "<div class='my-3 alert alert-danger p-3 text-center'>Preencha todos os campos!</div>";
+                                    } else if ($_GET["error"] == "wronglogin") {
+                                        echo "<div class='my-3 alert alert-danger p-3 text-center'>Usuário/E-mail ou senha errados, tente novamente!</div>";
+                                    }else if ($_GET["error"] == "stmtfailed") {
+                                        echo "<div class='my-3 alert alert-danger p-3 text-center'>Nenhum Usuário encontrado</div>";
+                                    } else if ($_GET["error"] == "waitaprov") {
+                                        //echo "<div id='red-warning'></div>";
+
+                                        //Pop-up
+                                        echo "
+                                                            <div class='modal-dialog'  name='myModal' tabindex='-1' role='dialog'>
+                                                                <div class='modal-content'>
+                                                                    <div class='modal-header'>
+                                                                        <h5 class='modal-title' id='exampleModalLabel'>Cadastro Pendente</h5>                                                                       
+                                                                        
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class='modal-body'>
+                                                                        <p>Cadastro em processo de validação, enviaremos no seu número cadastrado o link para seu 1º acesso.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        ";
+                                    } else if ($_GET["error"] == "bloquser") {
+                                        //echo "<div id='red-warning'></div>";
+
+                                        //Pop-up
+                                        echo "
+                                                            <div class='modal-dialog'  name='myModal' tabindex='-1' role='dialog'>
+                                                                <div class='modal-content'>
+                                                                    <div class='modal-header'>
+                                                                        <h5 class='modal-title' id='exampleModalLabel'>Usuário Bloqueado</h5>
+                                                                        
+                                                                        
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class='modal-body'>
+                                                                        <p>Detectamos algumas atividades suspeitas e sua conta foi bloqueada. Caso ache que tenha havido algum engano entre em contato conosco.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        ";
+                                    }
+                                }
+                                ?>
+                                <div class="d-flex justify-content-center py-2 my-4">
+                                    <div ><a href="cadastro.php" class="btn btn-outline-secondary">Não tem uma conta? Cadastre-se</a></div>
+
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Gráficos -->
-                        <h5 class="text-ciano-agiliza">Estatísticas</h5>
-
-                        <!-- Gráfico de pizza para raças mais frequentes -->
-                        <div class="card mb-3">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Raças Mais Frequentes</h5>
-                                <canvas id="chartPie"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Gráfico de pizza para serviços mais solicitados -->
-                        <div class="card mb-3">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Serviços Mais Solicitados</h5>
-                                <canvas id="chartPieServico"></canvas>
+                                <div class="text-center py-1">
+                                    <div class=""><a href="senha" class="text-fab">Esqueceu sua senha? Recuperar</a></div>
+                                </div>
+                                <div class="py-3"></div>
                             </div>
                         </div>
                     </div>
@@ -247,64 +194,27 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    </main>
     <script>
-        // Função para gerar cores aleatórias
-        function gerarCoresAleatorias(quantidade) {
-            const cores = [];
-            for (let i = 0; i < quantidade; i++) {
-                cores.push('#' + Math.floor(Math.random() * 16777215).toString(16));
+        function showPass() {
+
+            event.preventDefault();
+            var passInput = document.getElementById('login-input-2');
+            if (passInput.type == 'password') {
+                passInput.type = 'text';
+
+            } else {
+                passInput.type = 'password';
+
             }
-            return cores;
         }
-
-        // Gráfico de pizza para raças mais frequentes
-        const ctxPie = document.getElementById('chartPie').getContext('2d');
-        const dataRacas = {
-            labels: <?php
-                $racas = [];
-                while ($row = $result_racas_frequentes->fetch_assoc()) {
-                    $racas[] = $row;
-                }
-                echo json_encode(array_column($racas, 'raca'));
-                ?>,
-            datasets: [{
-                label: 'Raças Mais Frequentes',
-                data: <?php echo json_encode(array_column($racas, 'frequencia')); ?>,
-                backgroundColor: gerarCoresAleatorias(<?php echo count($racas); ?>),
-                borderColor: 'rgba(255, 255, 255, 1)',
-                borderWidth: 1
-            }]
-        };
-        new Chart(ctxPie, {
-            type: 'pie',
-            data: dataRacas
-        });
-
-        // Gráfico de pizza para serviços mais solicitados
-        const ctxPieServico = document.getElementById('chartPieServico').getContext('2d');
-        const dataServicos = {
-            labels: <?php
-                $servicos = [];
-                while ($row = $result_servicos_solicitados->fetch_assoc()) {
-                    $servicos[] = $row;
-                }
-                echo json_encode(array_column($servicos, 'servico'));
-                ?>,
-            datasets: [{
-                label: 'Serviços Mais Solicitados',
-                data: <?php echo json_encode(array_column($servicos, 'frequencia')); ?>,
-                backgroundColor: gerarCoresAleatorias(<?php echo count($servicos); ?>),
-                borderColor: 'rgba(255, 255, 255, 1)',
-                borderWidth: 1
-            }]
-        };
-        new Chart(ctxPieServico, {
-            type: 'pie',
-            data: dataServicos
-        });
     </script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/c0eae24639.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -305,7 +305,7 @@ $servicos = $stmt_servicos->fetchAll(PDO::FETCH_ASSOC);
 </html>
 <?php
 } else {
-    header("location: login.php");
+    header("location: index.php");
     exit();
 }
 ?>

@@ -115,7 +115,7 @@ if (isset($_SESSION["userEmail"])) {
 </html>
 <?php
 } else {
-    header("location: login.php");
+    header("location: index.php");
     exit();
 }
 ?>

@@ -1,26 +1,31 @@
 <?php
-
-echo "<pre>";
-echo "Dados do POST:\n";
-var_dump($_POST);
-echo "</pre>";
-
+session_start();
+require_once '../bd/conexao.php';
+require_once 'functions.inc.php';
 
 if (isset($_POST["submit"])) {
-    $raca =  addslashes($_POST['raca'] ?? '');
-    $nome_pet = addslashes($_POST['nomePet'] ?? '');
-    $nome_tutor = addslashes($_POST['nomeTutor'] ?? '');
-    $contato_tutor = addslashes($_POST['contatoTutor'] ?? '');
-    $descricao_servico = addslashes($_POST['descricao'] ?? '');
+    $raca = addslashes($_POST['raca'] ?? '');
+    $nome = addslashes($_POST['nomePet'] ?? '');
+    $dono = addslashes($_POST['nomeTutor'] ?? '');
+    $idade = addslashes($_POST['idade'] ?? '');
+    $contato = addslashes($_POST['contatoTutor'] ?? '');    
     $observacao = addslashes($_POST['observacao'] ?? '');
+    $idResp = $_SESSION["userid"];
 
-    require_once '../bd/conexao.php';
-    require_once 'functions.inc.php';
+    date_default_timezone_set('America/Sao_Paulo');
+    $hoje = date('Y-m-d');    // Define a data atual
+    $agora = date('H:i:s');   // Define a hora atual
 
+    echo "<p>raca: $raca, <p>nome donno: $dono, <p>nome per: $nome ";
+    echo "<p>idade: $idade, contato: $contato, observacao: $observacao </p>";
+    echo "<p>resp: $idResp</p>";
+    echo "Data e Hora de Início: " . $hoje;
+    
     $conn->begin_transaction();
 
-    createPet($conn, $nome_tutor, $contato_tutor, $raca, $nome_pet, $descricao_servico, $observacao);
+    createPet($conn, $raca, $nome, $idade, $dono, $contato, $observacao, $hoje, $agora);
 } else {
-    header("location: .././cadastro.php?error=none");
+    header("location: ../cadastro.php?error=none");
     exit();
 }
+

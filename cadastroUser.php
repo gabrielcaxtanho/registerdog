@@ -1,10 +1,3 @@
-<?php
-session_start();
-if (isset($_SESSION["userEmail"])) {
-    require_once(__DIR__ . "/includes/functions.inc.php");
-    
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -76,21 +69,21 @@ if (isset($_SESSION["userEmail"])) {
     include_once './bd/conexao.php';
     ?>
 
-<div class="container">
-    <div class="row py-4">
-        <div class="col">
-        <div class="font">
-            <h3 class="text-center fw-bold"><b>NOVO USUÁRIO</b></h3>
-        </div>
-        </div>
+    <div class="container">
+        <div class="row py-4">
+            <div class="col">
+                <div class="font">
+                    <h3 class="text-center fw-bold"><b>NOVO USUÁRIO</b></h3>
+                </div>
+            </div>
 
+        </div>
     </div>
-</div>
-<div class="container-fluid" >
-    <div class="row justify-content-center">
-        <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
-            <div class="font">
-                <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-4" style="display: flex; align-content: center; flex-wrap: wrap;">
+                <div class="font">
+                    <h2 style="text-align: center; color: darkcyan;"> PET REGISTER</h2>
                     <h4 class="text-secondary" style="text-align: center;">TODOS OS SEUS REGISTROS EM UM SÓ LUGAR</h4>
                     <div class="d-flex-de flex-column align-items-center p-3 bg-light rounded shadow-sm" style="margin-top: 3em;">
                         <!--  <img src="./img/logopets.png" alt="Logo Pets" width="50%"> -->
@@ -136,14 +129,13 @@ if (isset($_SESSION["userEmail"])) {
                                 Nome fantasia deve ter pelo menos 5 caracteres.
                             </div>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="validationServerUsername" class="form-label">Nome de usuário</label>
+                            <label for="validationServerEmail" class="form-label">E-mail</label>
                             <div class="input-group">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" id="validationServerUsername" name="usersEmail" minlength="5" required>
+                                <input type="text" class="form-control" id="validationServer01" name="userEmail" minlength="9" required placeholder="seuemail@dominio.com">
                                 <div class="invalid-feedback">
-                                    Nome de usuário deve ter pelo menos 5 caracteres.
+                                    Por favor, insira um e-mail válido.
                                 </div>
                             </div>
                         </div>
@@ -250,7 +242,7 @@ if (isset($_SESSION["userEmail"])) {
 
     <div class="card-footer text-center">
         <div class="">
-            <a href="login">
+            <a href="index.php">
                 <div class="alert-secondary">Já tenho cadastro! Acessar</div>
             </a>
         </div>
@@ -404,8 +396,5 @@ if (isset($_SESSION["userEmail"])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 <?php
-} else {
-    header("location: login.php");
-    exit();
-}
+
 ?>

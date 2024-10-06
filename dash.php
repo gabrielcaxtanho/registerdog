@@ -36,7 +36,7 @@ if (isset($_SESSION["userEmail"])) {
                 
                 <!-- Seção de estatísticas com cartões -->
                 <div class="col-md-8">
-                    <h5 class="txt-ciano-agiliza" style="font-weight: 400; margin-bottom: 2em;">😄 Olá, <?php echo $_SESSION["userName"]; ?>! Bem-vindo a <b style="font-weight: 700;">sua Dashboard </b></h5>
+                    <h5 class="txt-ciano-agiliza" style="font-weight: 400; margin-bottom: 2em;">😄 Olá, <?php echo $_SESSION["userName"];  ?>! Bem-vindo a <b style="font-weight: 700;">sua Dashboard </b></h5>
 
                     <div class="card shadow rounded p-4 h-100" style="border-top: #2e8a97 7px solid;">
                         <h5 class="text-ciano-agiliza"><i class="fa-solid fa-ranking-star"></i> Ranking dos mais frequentes</h5>

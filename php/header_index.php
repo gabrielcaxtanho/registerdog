@@ -60,7 +60,7 @@
     <a href="dash.php"><i class="fas fa-home fa-1x"></i> Início</a>
     <a href="perfil.php"><i class="far fa-id-badge"></i> Meu Perfil</a>
     <a href='cadastro.php'><i class="fa-solid fa-address-card"></i></i> Cadastro</a>
-    <a href='cadastrado.php'><i class="fa-solid fa-magnifying-glass-chart"></i> Historico</a>
+    <a href='historico.php'><i class="fa-solid fa-magnifying-glass-chart"></i> Historico</a>
     <a href='acompanhamento.php'><i class='fas fa-list fa-1x'></i> Acompanhamento</a>
     <a class="deactivated"><i class='fas fa-cog fa-1x'></i> Configurações</a>
     <a class="deactivated"><i class="fas fa-boxes fa-1x"></i> Produtos</a>

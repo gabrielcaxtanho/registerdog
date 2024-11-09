@@ -72,7 +72,7 @@ if (isset($_SESSION["userEmail"])) {
         die('Erro ao buscar donos: ' . mysqli_error($conn));
     }
     $donos = mysqli_fetch_all($result_donos, MYSQLI_ASSOC);
-    
+
     // Consulta para buscar todos os serviços disponíveis
     $sql_servicos = "SELECT idServico, descricao FROM servico";
     $result_servicos = mysqli_query($conn, $sql_servicos);
@@ -106,7 +106,7 @@ if (isset($_SESSION["userEmail"])) {
 
         <div class="">
             <h4 class="text-center"><i class="fa-solid fa-paw fa-2xl" style="color: #ffffff; margin: 22px; margin-top:3%"></i> Informações do Pet <strong style="text-transform: uppercase; color: #4b6d89;"><?= htmlspecialchars($pet['nomePet']) ?></strong></h4>
-            <div class="row justify-content-evenly"> 
+            <div class="row justify-content-evenly">
                 <div class="col-md-3" style="margin-left: 2%;">
                     <hr class="border-white">
                     <div class="shadow rounded p-4 mb-4" style="border-top: #2e8a97 7px solid;">
@@ -166,19 +166,24 @@ if (isset($_SESSION["userEmail"])) {
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="mb-5">
-                                <label for="dataVisita" class="form-label mt-3" style="font-family: cursive; font-size: larger;">Data da Visita:</label>
-                                <input type="date" id="dataVisita" name="datasVisita[]" class="form-control">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="observacao" class="form-label">Observação</label>
+                                    <textarea id="observacao" name="observacao" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                <label for="dataVisita" class="form-label">Data da Visita</label>
+                                    <input type="date" id="dataVisita" name="dataVisita[]" class="form-control">
+                                </div>
                             </div>
-                            
+
                             <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    
+
 
         <script>
             document.querySelectorAll('.servico-btn').forEach(button => {
@@ -208,10 +213,11 @@ if (isset($_SESSION["userEmail"])) {
                 });
             });
         </script>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     </body>
+
     </html>
 
 <?php

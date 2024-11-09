@@ -28,6 +28,25 @@ if (isset($_SESSION["userEmail"])) {
         <?php include_once 'php/header_index.php'; ?>
         <?php
         require './bd/conexao.php';
+        
+        $sql_dono_mais_frequente = "SELECT donos.nome AS dono, COUNT(*) AS visitas 
+                                    FROM donos 
+                                    JOIN pets ON donos.id = pets.dono 
+                                    GROUP BY donos.id 
+                                    ORDER BY visitas DESC 
+                                    LIMIT 1";
+        $result_dono_mais_frequente = $conn->query($sql_dono_mais_frequente);
+        $row_dono_mais_frequente = $result_dono_mais_frequente->fetch_assoc();
+
+    
+        $sql_pet_mais_frequente = "SELECT pets.nome AS pet, COUNT(*) AS visitas 
+                                FROM pets 
+                                GROUP BY pets.id 
+                                ORDER BY visitas DESC 
+                                LIMIT 1";
+        $result_pet_mais_frequente = $conn->query($sql_pet_mais_frequente);
+        $row_pet_mais_frequente = $result_pet_mais_frequente->fetch_assoc();
+
         ?>
 
         <div class="container-fluid" style="margin: 5em 0;">

@@ -428,3 +428,18 @@ function dd($parametro, $parametro2 = '', $parametro3 = ''): never
     die("<h1 style=\"color: rebeccapurple;\">Voce esta debugando o CÓDIGO <i class=\"bi bi-emoji-sunglasses-fill\"></i>     <i class=\"bi bi-code-slash\"></i>  </h1> <br>
     <img style=\"width: 150px; margin:100px;\" src=\"assetsnew/img/programador.jpg\" alt=\"\">");
 }
+
+function addservicoPet($conn, $petId, $servicoId, $dataVisita, $idCliente, $observacao) {
+    $sql = "INSERT INTO frequencia (idCliente, idPet, idServico, dataVisita, observacao) 
+            VALUES (?, ?, ?, ?, ?)";
+    
+    $stmt = mysqli_prepare($conn, $sql);
+    
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "iiiss", $idCliente, $petId, $servicoId, $dataVisita, $observacao);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        die("Erro ao preparar a query: " . mysqli_error($conn));
+    }
+}

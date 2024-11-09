@@ -71,7 +71,7 @@ if (isset($_SESSION["userEmail"])) {
                         <table id="table" class="table table-striped table-advance table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>#</th>
                                     <th>Responsável</th>
                                     <th>Pet</th>
                                     <th>Raça</th>
